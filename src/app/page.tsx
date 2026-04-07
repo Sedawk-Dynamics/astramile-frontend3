@@ -40,16 +40,24 @@ export default function Home() {
       {/* ═══ HERO ═══ */}
       <section className="relative h-[100svh] min-h-[500px] overflow-hidden">
         <div className="absolute inset-0 z-0">
-          <video
-            autoPlay
-            muted
-            loop
-            playsInline
-            poster="/Karman line.webp"
-            className="absolute inset-0 w-full h-full object-cover"
-          >
-            <source src="/videos/hero-section.mp4" type="video/mp4" />
-          </video>
+          {/* YouTube bg video — scaled to cover like object-fit:cover */}
+          <div className="absolute inset-0 overflow-hidden">
+            <iframe
+              src="https://www.youtube.com/embed/4F8Heeu5L5U?autoplay=1&mute=1&loop=1&playlist=4F8Heeu5L5U&controls=0&showinfo=0&rel=0&modestbranding=1&playsinline=1&disablekb=1&iv_load_policy=3"
+              allow="autoplay; encrypted-media"
+              className="absolute top-1/2 left-1/2 pointer-events-none"
+              style={{
+                border: "none",
+                width: "100vw",
+                height: "56.25vw",
+                minHeight: "100vh",
+                minWidth: "177.78vh",
+                transform: "translate(-50%, -50%)",
+              }}
+            />
+          </div>
+          {/* Fallback poster */}
+          <Image src="/Karman line.webp" alt="Karman line" fill className="object-cover -z-10" sizes="100vw" priority />
           <div className="absolute inset-0" style={{
             background: "linear-gradient(to bottom, rgba(0,0,0,0.3) 0%, rgba(0,0,0,0.15) 40%, rgba(0,0,0,0.6) 100%)",
           }} />
