@@ -81,14 +81,6 @@ body {
   color: var(--bg);
 }
 
-/* ─── Custom cursor (hide default on desktop) ─── */
-@media (pointer: fine) {
-  html, body, *, *::before, *::after,
-  a, button, input, textarea, select, label,
-  [role="button"], [type="button"], [type="submit"] {
-    cursor: none !important;
-  }
-}
 
 /* ─── Glass ─── */
 .glass {
@@ -576,6 +568,27 @@ body {
 ::-webkit-scrollbar-thumb:hover { background: var(--border-hover); }
 * { scrollbar-width: thin; scrollbar-color: var(--scrollbar) transparent; }
 
+
+/* ─── Smooth section separators ─── */
+.section-glow-top {
+  position: relative;
+}
+.section-glow-top::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 10%;
+  right: 10%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--accent), var(--accent-warm), transparent);
+  opacity: 0.15;
+}
+
+/* ─── Card scan line ─── */
+@keyframes scan {
+  0% { top: -10%; }
+  100% { top: 110%; }
+}
 
 @media (max-width: 768px) {
   .grain-overlay { display: none; }
