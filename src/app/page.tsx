@@ -70,7 +70,7 @@ export default function Home() {
         <motion.div
           className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-[45%] z-10 pointer-events-none hidden md:block"
           initial={{ opacity: 0, scale: 0.7 }}
-          animate={{ opacity: 0.35, scale: 1 }}
+          animate={{ opacity: 0.6, scale: 1 }}
           transition={{ duration: 1.5, ease: [0.22, 1, 0.36, 1] }}
         >
           <Image
@@ -78,7 +78,7 @@ export default function Home() {
             alt="A"
             width={800}
             height={800}
-            className="w-[90vw] lg:w-[85vw] h-auto max-w-none"
+            className="w-[90vw] lg:w-[85vw] h-auto max-w-none saturate-150"
             priority
           />
         </motion.div>
@@ -98,6 +98,37 @@ export default function Home() {
             className="w-48 sm:w-56 h-auto"
             priority
           />
+        </motion.div>
+
+        {/* "Beyond Infinity" tagline — bottom-right, appears after 5s */}
+        <motion.div
+          className="absolute bottom-10 right-6 sm:bottom-14 sm:right-10 md:bottom-20 md:right-16 z-20 pointer-events-none hidden md:flex flex-col items-end gap-2"
+          initial={{ opacity: 0, y: 20, filter: "blur(8px)" }}
+          animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+          transition={{ delay: 5, duration: 1.4, ease: [0.22, 1, 0.36, 1] }}
+        >
+          <Image
+            src="/logos/astramile svg.svg"
+            alt="AstraMile"
+            width={180}
+            height={45}
+            className="w-36 md:w-44 h-auto opacity-95"
+          />
+          <motion.div
+            className="h-px w-full origin-right"
+            style={{ background: "linear-gradient(270deg, var(--accent), var(--accent-warm), transparent)" }}
+            initial={{ scaleX: 0 }}
+            animate={{ scaleX: 1 }}
+            transition={{ delay: 5.5, duration: 1, ease: [0.22, 1, 0.36, 1] }}
+          />
+          <motion.span
+            className="font-display italic text-lg md:text-xl tracking-[0.12em] grad-text"
+            initial={{ opacity: 0, x: 10 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ delay: 5.8, duration: 1, ease: [0.22, 1, 0.36, 1] }}
+          >
+            Beyond Infinity ‎ 
+          </motion.span>
         </motion.div>
       </section>
 
