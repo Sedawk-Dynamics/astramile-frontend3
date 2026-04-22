@@ -5,15 +5,16 @@ import Image from "next/image";
 import { motion } from "framer-motion";
 import { MapPin, Target, Clock, AlertCircle, Play, RotateCcw } from "lucide-react";
 import PageHero from "@/components/PageHero";
+import { LoadingBlock, EmptyBlock, ErrorBlock } from "@/components/DataState";
+import { ApiLaunch, resolveImage, usePublicList } from "@/lib/publicApi";
 
-const launches = [
-  { name: "Artemis IV", date: new Date("2026-06-15T14:00:00Z"), location: "Kennedy Space Center, FL", objective: "Deliver I-HAB module to Lunar Gateway", rocket: "SLS Block 1B", status: "On Schedule", image: "https://images.unsplash.com/photo-1457364559154-aa2644600ebb?w=600&q=80" },
-  { name: "Starlink Group 12", date: new Date("2026-05-20T09:30:00Z"), location: "Cape Canaveral, FL", objective: "Deploy 60 V2 mini satellites to LEO", rocket: "Falcon 9", status: "Go", image: "https://images.unsplash.com/photo-1517976487492-5750f3195933?w=600&q=80" },
-  { name: "Europa Clipper", date: new Date("2026-08-01T16:00:00Z"), location: "Vandenberg SFB, CA", objective: "Investigate Europa's ocean habitability", rocket: "Falcon Heavy", status: "Preparing", image: "https://images.unsplash.com/photo-1462332420958-a05d1e002413?w=600&q=80" },
-  { name: "Chandrayaan-4", date: new Date("2026-10-10T06:00:00Z"), location: "Satish Dhawan Centre", objective: "Lunar sample return from south pole", rocket: "GSLV Mk III", status: "Planning", image: "https://images.unsplash.com/photo-1446941611757-91d2c3bd3d45?w=600&q=80" },
-  { name: "Mars Express II", date: new Date("2026-12-01T12:00:00Z"), location: "Kourou, French Guiana", objective: "Mars orbit insertion for relay comms", rocket: "Ariane 5", status: "Planning", image: "https://images.unsplash.com/photo-1614728263952-84ea256f9679?w=600&q=80" },
-  { name: "Axiom Station Alpha", date: new Date("2027-02-15T10:00:00Z"), location: "Cape Canaveral, FL", objective: "Commercial station module deployment", rocket: "Starship", status: "Conceptual", image: "https://images.unsplash.com/photo-1446776811953-b23d57bd21aa?w=600&q=80" },
-];
+const statusLabel: Record<ApiLaunch["status"], string> = {
+  UPCOMING: "On Schedule",
+  LIVE: "Live Now",
+  SUCCESS: "Successful",
+  FAILURE: "Failure",
+  SCRUBBED: "Scrubbed",
+};
 
 function Countdown({ target }: { target: Date }) {
   const [t, setT] = useState({ d: 0, h: 0, m: 0, s: 0 });
@@ -82,6 +83,8 @@ function LaunchSim() {
 }
 
 export default function LaunchesPage() {
+  const { data: launches, loading, error } = usePublicList<ApiLaunch>("/api/launches");
+
   return (
     <div className="page-enter">
       <PageHero title="Upcoming Launches" subtitle="Real-time countdowns to humanity's next giant leaps."
@@ -89,33 +92,49 @@ export default function LaunchesPage() {
 
       <section className="py-28 px-5">
         <div className="max-w-[1400px] mx-auto">
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-5 mb-16">
-            {launches.map((l, i) => (
-              <motion.div key={l.name} initial={{ opacity: 0, y: 35, filter: "blur(4px)" }} whileInView={{ opacity: 1, y: 0, filter: "blur(0px)" }}
-                viewport={{ once: true }} transition={{ delay: i * 0.1, duration: 0.7, ease: [0.22, 1, 0.36, 1] }} className="card overflow-hidden group tilt-hover gradient-border">
-                <div className="relative h-40 overflow-hidden img-zoom">
-                  <Image src={l.image} alt={l.name} fill className="object-cover" sizes="33vw" />
-                  <div className="absolute inset-0 bg-gradient-to-t from-bg via-bg/50 to-transparent" />
-                  <div className="absolute top-3 left-3 glass rounded-full px-2.5 py-0.5 flex items-center gap-1">
-                    <AlertCircle className="w-2.5 h-2.5 t-secondary" />
-                    <span className="text-[10px] t-secondary font-medium">{l.status}</span>
-                  </div>
-                  <div className="absolute bottom-3 left-4 right-4 flex items-center justify-between">
-                    <h3 className="text-base font-bold t-primary">{l.name}</h3>
-                    <span className="tag text-[9px]">{l.rocket}</span>
-                  </div>
-                </div>
-                <div className="p-4 space-y-3">
-                  <Countdown target={l.date} />
-                  <div className="space-y-1.5 pt-1">
-                    <p className="flex items-center gap-2 text-xs t-muted"><MapPin className="w-3 h-3 text-accent/40" />{l.location}</p>
-                    <p className="flex items-center gap-2 text-xs t-muted"><Target className="w-3 h-3 text-teal/40" />{l.objective}</p>
-                    <p className="flex items-center gap-2 text-xs t-muted"><Clock className="w-3 h-3 text-accent2/40" />{l.date.toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" })}</p>
-                  </div>
-                </div>
-              </motion.div>
-            ))}
-          </div>
+          {loading && <LoadingBlock label="Loading launches…" />}
+          {!loading && error && <ErrorBlock error={error} />}
+          {!loading && !error && launches.length === 0 && (
+            <EmptyBlock title="No launches scheduled" hint="Schedule launches in the admin panel to show countdowns here." />
+          )}
+
+          {launches.length > 0 && (
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-5 mb-16">
+              {launches.map((l, i) => {
+                const img = resolveImage(l.image);
+                const target = new Date(l.scheduledAt);
+                return (
+                  <motion.div key={l.id} initial={{ opacity: 0, y: 35, filter: "blur(4px)" }} whileInView={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+                    viewport={{ once: true }} transition={{ delay: i * 0.1, duration: 0.7, ease: [0.22, 1, 0.36, 1] }} className="card overflow-hidden group tilt-hover gradient-border">
+                    <div className={`relative h-40 overflow-hidden img-zoom ${!img ? "bg-[var(--surface)]" : ""}`}>
+                      {img && <Image src={img} alt={l.name} fill className="object-cover" sizes="33vw" />}
+                      <div className="absolute inset-0 bg-gradient-to-t from-bg via-bg/50 to-transparent" />
+                      <div className="absolute top-3 left-3 glass rounded-full px-2.5 py-0.5 flex items-center gap-1">
+                        <AlertCircle className="w-2.5 h-2.5 t-secondary" />
+                        <span className="text-[10px] t-secondary font-medium">{statusLabel[l.status]}</span>
+                      </div>
+                      <div className="absolute bottom-3 left-4 right-4 flex items-center justify-between">
+                        <h3 className="text-base font-bold t-primary">{l.name}</h3>
+                        {l.rocket?.name && <span className="tag text-[9px]">{l.rocket.name}</span>}
+                      </div>
+                    </div>
+                    <div className="p-4 space-y-3">
+                      <Countdown target={target} />
+                      <div className="space-y-1.5 pt-1">
+                        {l.launchSite && (
+                          <p className="flex items-center gap-2 text-xs t-muted"><MapPin className="w-3 h-3 text-accent/40" />{l.launchSite}</p>
+                        )}
+                        {l.description && (
+                          <p className="flex items-center gap-2 text-xs t-muted"><Target className="w-3 h-3 text-teal/40" />{l.description}</p>
+                        )}
+                        <p className="flex items-center gap-2 text-xs t-muted"><Clock className="w-3 h-3 text-accent2/40" />{target.toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" })}</p>
+                      </div>
+                    </div>
+                  </motion.div>
+                );
+              })}
+            </div>
+          )}
 
           <LaunchSim />
         </div>

@@ -3,8 +3,9 @@
 import { useState, FormEvent } from "react";
 import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
-import { Send, CheckCircle, Mail, User, FileText, MessageSquare, MapPin, Phone, Clock } from "lucide-react";
+import { Send, CheckCircle, Mail, User, FileText, MessageSquare, MapPin, Phone, Clock, AlertCircle } from "lucide-react";
 import PageHero from "@/components/PageHero";
+import { postJson } from "@/lib/publicApi";
 
 const info = [
   { icon: MapPin, label: "Headquarters", value: "Kennedy Space Center, FL 32899" },
@@ -16,11 +17,27 @@ const info = [
 export default function ContactPage() {
   const [submitted, setSubmitted] = useState(false);
   const [focused, setFocused] = useState<string | null>(null);
+  const [busy, setBusy] = useState(false);
+  const [err, setErr] = useState<string | null>(null);
 
-  const handleSubmit = (e: FormEvent) => {
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [subject, setSubject] = useState("");
+  const [message, setMessage] = useState("");
+
+  const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
-    setSubmitted(true);
-    setTimeout(() => setSubmitted(false), 4000);
+    setBusy(true);
+    setErr(null);
+    try {
+      await postJson("/api/contact", { name, email, subject: subject || undefined, message });
+      setSubmitted(true);
+      setName(""); setEmail(""); setSubject(""); setMessage("");
+    } catch (e) {
+      setErr(e instanceof Error ? e.message : "Send failed. Please try again.");
+    } finally {
+      setBusy(false);
+    }
   };
 
   return (
@@ -31,7 +48,6 @@ export default function ContactPage() {
       <section className="py-28 px-5">
         <div className="max-w-[1400px] mx-auto">
           <div className="grid lg:grid-cols-3 gap-8">
-            {/* Info */}
             <div className="space-y-4">
               {info.map((item, i) => (
                 <motion.div key={item.label} initial={{ opacity: 0, x: -20 }} whileInView={{ opacity: 1, x: 0 }}
@@ -47,7 +63,6 @@ export default function ContactPage() {
                 </motion.div>
               ))}
 
-              {/* Map placeholder */}
               <motion.div initial={{ opacity: 0, y: 30, filter: "blur(4px)" }} whileInView={{ opacity: 1, y: 0, filter: "blur(0px)" }} viewport={{ once: true }}
                 transition={{ delay: 0.4 }} className="relative h-48 rounded-xl overflow-hidden img-zoom">
                 <Image src="https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=600&q=80" alt="Earth from orbit" fill className="object-cover" sizes="33vw" />
@@ -60,7 +75,6 @@ export default function ContactPage() {
               </motion.div>
             </div>
 
-            {/* Form */}
             <motion.div initial={{ opacity: 0, y: 35, filter: "blur(4px)" }} whileInView={{ opacity: 1, y: 0, filter: "blur(0px)" }} viewport={{ once: true }}
               className="lg:col-span-2 card p-6 md:p-8 gradient-border">
               <AnimatePresence mode="wait">
@@ -71,37 +85,50 @@ export default function ContactPage() {
                       <CheckCircle className="w-16 h-16 text-accent mb-4" />
                     </motion.div>
                     <h3 className="text-2xl font-bold grad-text mb-2">Transmission Received</h3>
-                    <p className="t-secondary text-sm">We&apos;ll respond within one orbit cycle.</p>
+                    <p className="t-secondary text-sm mb-6">We&apos;ll respond within one orbit cycle.</p>
+                    <button type="button" onClick={() => setSubmitted(false)} className="btn btn-ice text-xs">
+                      Send another message
+                    </button>
                   </motion.div>
                 ) : (
                   <motion.form key="form" initial={{ opacity: 1 }} exit={{ opacity: 0 }} onSubmit={handleSubmit} className="space-y-5">
+                    {err && (
+                      <div className="flex items-center gap-2 text-sm text-red-400 bg-red-500/10 border border-red-500/20 rounded-lg px-4 py-3">
+                        <AlertCircle className="w-4 h-4" /> {err}
+                      </div>
+                    )}
                     <div className="grid sm:grid-cols-2 gap-5">
-                      {[
-                        { id: "name", label: "Full Name", type: "text", Icon: User },
-                        { id: "email", label: "Email Address", type: "email", Icon: Mail },
-                      ].map((f) => (
-                        <div key={f.id} className="relative">
-                          <f.Icon className={`absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 transition-colors ${focused === f.id ? "text-accent" : "t-faint"}`} />
-                          <input type={f.type} required placeholder={f.label}
-                            onFocus={() => setFocused(f.id)} onBlur={() => setFocused(null)}
-                            className="w-full pl-11 pr-4 py-3 bg-[var(--input-bg)] border border-[var(--border)] rounded-xl text-sm t-primary placeholder-[color:var(--text-faint)] focus:outline-none focus:border-accent/30 transition-all" />
-                        </div>
-                      ))}
+                      <div className="relative">
+                        <User className={`absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 transition-colors ${focused === "name" ? "text-accent" : "t-faint"}`} />
+                        <input type="text" required placeholder="Full Name" value={name}
+                          onChange={(e) => setName(e.target.value)}
+                          onFocus={() => setFocused("name")} onBlur={() => setFocused(null)}
+                          className="w-full pl-11 pr-4 py-3 bg-[var(--input-bg)] border border-[var(--border)] rounded-xl text-sm t-primary placeholder-[color:var(--text-faint)] focus:outline-none focus:border-accent/30 transition-all" />
+                      </div>
+                      <div className="relative">
+                        <Mail className={`absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 transition-colors ${focused === "email" ? "text-accent" : "t-faint"}`} />
+                        <input type="email" required placeholder="Email Address" value={email}
+                          onChange={(e) => setEmail(e.target.value)}
+                          onFocus={() => setFocused("email")} onBlur={() => setFocused(null)}
+                          className="w-full pl-11 pr-4 py-3 bg-[var(--input-bg)] border border-[var(--border)] rounded-xl text-sm t-primary placeholder-[color:var(--text-faint)] focus:outline-none focus:border-accent/30 transition-all" />
+                      </div>
                     </div>
                     <div className="relative">
                       <FileText className={`absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 transition-colors ${focused === "subj" ? "text-accent" : "t-faint"}`} />
-                      <input type="text" required placeholder="Subject"
+                      <input type="text" placeholder="Subject" value={subject}
+                        onChange={(e) => setSubject(e.target.value)}
                         onFocus={() => setFocused("subj")} onBlur={() => setFocused(null)}
                         className="w-full pl-11 pr-4 py-3 bg-[var(--input-bg)] border border-[var(--border)] rounded-xl text-sm t-primary placeholder-[color:var(--text-faint)] focus:outline-none focus:border-accent/30 transition-all" />
                     </div>
                     <div className="relative">
                       <MessageSquare className={`absolute left-4 top-3.5 w-4 h-4 transition-colors ${focused === "msg" ? "text-accent" : "t-faint"}`} />
-                      <textarea required rows={6} placeholder="Your message..."
+                      <textarea required rows={6} placeholder="Your message..." value={message}
+                        onChange={(e) => setMessage(e.target.value)}
                         onFocus={() => setFocused("msg")} onBlur={() => setFocused(null)}
                         className="w-full pl-11 pr-4 py-3 bg-[var(--input-bg)] border border-[var(--border)] rounded-xl text-sm t-primary placeholder-[color:var(--text-faint)] focus:outline-none focus:border-accent/30 transition-all resize-none" />
                     </div>
-                    <button type="submit" className="btn btn-accent w-full justify-center !py-3.5">
-                      <Send className="w-4 h-4" /> Transmit Message
+                    <button type="submit" disabled={busy} className="btn btn-accent w-full justify-center !py-3.5 disabled:opacity-60 disabled:cursor-not-allowed">
+                      <Send className="w-4 h-4" /> {busy ? "Transmitting…" : "Transmit Message"}
                     </button>
                   </motion.form>
                 )}

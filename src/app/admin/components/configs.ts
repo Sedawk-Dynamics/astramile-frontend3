@@ -1,0 +1,230 @@
+import { ResourceConfig } from "./ResourceConfig";
+
+export const rocketsConfig: ResourceConfig = {
+  slug: "rockets",
+  singular: "Rocket",
+  plural: "Rockets",
+  apiPath: "/api/rockets",
+  titleField: "name",
+  listColumns: [
+    { key: "image", label: "", render: "image" },
+    { key: "name", label: "Name" },
+    { key: "successRate", label: "Success %" },
+    { key: "launches", label: "Launches" },
+    { key: "order", label: "Order" },
+    { key: "isPublished", label: "Status", render: "bool" },
+  ],
+  fields: [
+    { name: "name", label: "Name", type: "text", required: true },
+    { name: "slug", label: "Slug", type: "slug", derivedFrom: "name", hint: "Leave blank to auto-generate from name" },
+    { name: "tagline", label: "Tagline", type: "text" },
+    { name: "description", label: "Description", type: "textarea", required: true },
+    { name: "image", label: "Cover image", type: "image" },
+    { name: "heightM", label: "Height (m)", type: "number", step: 0.1 },
+    { name: "weightKg", label: "Weight (kg)", type: "number" },
+    { name: "payloadKg", label: "Payload to LEO (kg)", type: "number" },
+    { name: "successRate", label: "Success rate %", type: "number", step: 0.1 },
+    { name: "launches", label: "Launches", type: "number" },
+    { name: "features", label: "Features", type: "tags", hint: "Comma-separated list" },
+    { name: "order", label: "Display order", type: "number", defaultValue: 0 },
+    { name: "isPublished", label: "Published on site", type: "boolean", defaultValue: true },
+  ],
+};
+
+export const missionsConfig: ResourceConfig = {
+  slug: "missions",
+  singular: "Mission",
+  plural: "Missions",
+  apiPath: "/api/missions",
+  titleField: "name",
+  listColumns: [
+    { key: "image", label: "", render: "image" },
+    { key: "name", label: "Name" },
+    { key: "destination", label: "Destination" },
+    { key: "status", label: "Status", render: "tag" },
+    { key: "isPublished", label: "", render: "bool" },
+  ],
+  fields: [
+    { name: "name", label: "Name", type: "text", required: true },
+    { name: "slug", label: "Slug", type: "slug", derivedFrom: "name" },
+    { name: "summary", label: "Short summary", type: "textarea", required: true },
+    { name: "description", label: "Full description", type: "textarea", required: true },
+    { name: "destination", label: "Destination", type: "text", placeholder: "Moon / Mars / LEO…" },
+    {
+      name: "status",
+      label: "Status",
+      type: "select",
+      options: [
+        { value: "PLANNED", label: "Planned" },
+        { value: "ACTIVE", label: "Active" },
+        { value: "COMPLETED", label: "Completed" },
+        { value: "CANCELLED", label: "Cancelled" },
+      ],
+      defaultValue: "PLANNED",
+    },
+    { name: "startDate", label: "Start date", type: "date" },
+    { name: "endDate", label: "End date", type: "date" },
+    { name: "image", label: "Cover image", type: "image" },
+    { name: "order", label: "Display order", type: "number", defaultValue: 0 },
+    { name: "isPublished", label: "Published on site", type: "boolean", defaultValue: true },
+  ],
+};
+
+export const crewConfig: ResourceConfig = {
+  slug: "crew",
+  singular: "Crew member",
+  plural: "Crew",
+  apiPath: "/api/crew",
+  titleField: "name",
+  listColumns: [
+    { key: "photo", label: "", render: "image" },
+    { key: "name", label: "Name" },
+    { key: "role", label: "Role" },
+    { key: "nationality", label: "Nationality" },
+    { key: "isPublished", label: "", render: "bool" },
+  ],
+  fields: [
+    { name: "name", label: "Name", type: "text", required: true },
+    { name: "slug", label: "Slug", type: "slug", derivedFrom: "name" },
+    { name: "role", label: "Role / title", type: "text", required: true },
+    { name: "bio", label: "Bio", type: "textarea", required: true },
+    { name: "nationality", label: "Nationality", type: "text" },
+    { name: "photo", label: "Photo", type: "image" },
+    { name: "order", label: "Display order", type: "number", defaultValue: 0 },
+    { name: "isPublished", label: "Published on site", type: "boolean", defaultValue: true },
+  ],
+};
+
+export const launchesConfig: ResourceConfig = {
+  slug: "launches",
+  singular: "Launch",
+  plural: "Launches",
+  apiPath: "/api/launches",
+  titleField: "name",
+  listColumns: [
+    { key: "image", label: "", render: "image" },
+    { key: "name", label: "Name" },
+    { key: "scheduledAt", label: "Scheduled", render: "date" },
+    { key: "launchSite", label: "Site" },
+    { key: "status", label: "Status", render: "tag" },
+    { key: "isPublished", label: "", render: "bool" },
+  ],
+  fields: [
+    { name: "name", label: "Name", type: "text", required: true },
+    { name: "slug", label: "Slug", type: "slug", derivedFrom: "name" },
+    { name: "description", label: "Description", type: "textarea" },
+    { name: "scheduledAt", label: "Scheduled at", type: "datetime", required: true },
+    { name: "launchSite", label: "Launch site", type: "text", placeholder: "LC-39A, Kennedy…" },
+    {
+      name: "status",
+      label: "Status",
+      type: "select",
+      options: [
+        { value: "UPCOMING", label: "Upcoming" },
+        { value: "LIVE", label: "Live" },
+        { value: "SUCCESS", label: "Success" },
+        { value: "FAILURE", label: "Failure" },
+        { value: "SCRUBBED", label: "Scrubbed" },
+      ],
+      defaultValue: "UPCOMING",
+    },
+    { name: "streamUrl", label: "Livestream URL", type: "text" },
+    { name: "image", label: "Cover image", type: "image" },
+    { name: "rocketId", label: "Rocket ID", type: "text", hint: "Paste the rocket's ID (from the Rockets list)" },
+    { name: "missionId", label: "Mission ID", type: "text", hint: "Paste the mission's ID (from the Missions list)" },
+    { name: "order", label: "Display order", type: "number", defaultValue: 0 },
+    { name: "isPublished", label: "Published on site", type: "boolean", defaultValue: true },
+  ],
+};
+
+export const newsConfig: ResourceConfig = {
+  slug: "news",
+  singular: "Article",
+  plural: "News",
+  apiPath: "/api/news",
+  titleField: "title",
+  listColumns: [
+    { key: "coverImage", label: "", render: "image" },
+    { key: "title", label: "Title" },
+    { key: "category", label: "Category", render: "tag" },
+    { key: "publishedAt", label: "Published", render: "date" },
+    { key: "isPublished", label: "", render: "bool" },
+  ],
+  fields: [
+    { name: "title", label: "Title", type: "text", required: true },
+    { name: "slug", label: "Slug", type: "slug", derivedFrom: "title" },
+    { name: "category", label: "Category", type: "text", required: true, placeholder: "Milestone, Moon, Mars…" },
+    { name: "excerpt", label: "Excerpt", type: "textarea", required: true, hint: "Short summary shown in list views" },
+    { name: "body", label: "Article body", type: "textarea", required: true },
+    { name: "coverImage", label: "Cover image", type: "image" },
+    { name: "publishedAt", label: "Publication date", type: "datetime" },
+    { name: "isPublished", label: "Published on site", type: "boolean", defaultValue: true },
+  ],
+};
+
+export const galleryConfig: ResourceConfig = {
+  slug: "gallery",
+  singular: "Gallery item",
+  plural: "Gallery",
+  apiPath: "/api/gallery",
+  titleField: "title",
+  listColumns: [
+    { key: "image", label: "", render: "image" },
+    { key: "title", label: "Title" },
+    { key: "category", label: "Category", render: "tag" },
+    { key: "order", label: "Order" },
+    { key: "isPublished", label: "", render: "bool" },
+  ],
+  fields: [
+    { name: "title", label: "Title", type: "text", required: true },
+    { name: "caption", label: "Caption", type: "textarea" },
+    { name: "image", label: "Image", type: "image", required: true },
+    { name: "category", label: "Category", type: "text", placeholder: "Earth, Mars, Deep space…" },
+    { name: "order", label: "Display order", type: "number", defaultValue: 0 },
+    { name: "isPublished", label: "Published on site", type: "boolean", defaultValue: true },
+  ],
+};
+
+export const technologyConfig: ResourceConfig = {
+  slug: "technology",
+  singular: "Technology",
+  plural: "Technology",
+  apiPath: "/api/technology",
+  titleField: "title",
+  listColumns: [
+    { key: "image", label: "", render: "image" },
+    { key: "title", label: "Title" },
+    { key: "metric", label: "Metric" },
+    { key: "order", label: "Order" },
+    { key: "isPublished", label: "", render: "bool" },
+  ],
+  fields: [
+    { name: "title", label: "Title", type: "text", required: true },
+    { name: "slug", label: "Slug", type: "slug", derivedFrom: "title" },
+    { name: "description", label: "Description", type: "textarea", required: true },
+    { name: "icon", label: "Icon (lucide-react name)", type: "text", hint: "e.g. Zap, Shield, RotateCcw" },
+    { name: "metric", label: "Metric (display)", type: "text", placeholder: "40%, 3000°F…" },
+    { name: "metricLabel", label: "Metric label", type: "text", placeholder: "Efficiency, Max Temp…" },
+    { name: "image", label: "Image", type: "image" },
+    { name: "order", label: "Display order", type: "number", defaultValue: 0 },
+    { name: "isPublished", label: "Published on site", type: "boolean", defaultValue: true },
+  ],
+};
+
+export const statsConfig: ResourceConfig = {
+  slug: "stats",
+  singular: "Stat",
+  plural: "Homepage stats",
+  apiPath: "/api/stats",
+  titleField: "label",
+  listColumns: [
+    { key: "label", label: "Label" },
+    { key: "value", label: "Value" },
+    { key: "order", label: "Order" },
+  ],
+  fields: [
+    { name: "label", label: "Label", type: "text", required: true, placeholder: "Success rate" },
+    { name: "value", label: "Value", type: "text", required: true, placeholder: "99.2%" },
+    { name: "order", label: "Display order", type: "number", defaultValue: 0 },
+  ],
+};
