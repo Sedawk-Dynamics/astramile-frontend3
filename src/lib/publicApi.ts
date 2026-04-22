@@ -139,6 +139,32 @@ export type ApiNews = {
   coverImage: string | null; publishedAt: string; isPublished: boolean;
 };
 
+export type ApiBlog = {
+  id: string; slug: string; title: string; category: string | null;
+  excerpt: string; body: string;
+  coverImage: string | null; videoUrl: string | null;
+  author: string | null; tags: string[];
+  publishedAt: string; isPublished: boolean;
+};
+
+/** Convert YouTube/Vimeo/direct video URLs to an embeddable form. Returns `null` if the URL isn't recognised as an embeddable video. */
+export function toEmbedUrl(url: string | null | undefined): { kind: "iframe" | "video"; src: string } | null {
+  if (!url) return null;
+  // YouTube — handles watch?v=, youtu.be/, shorts/, embed/
+  const yt = url.match(
+    /^(?:https?:\/\/)?(?:www\.|m\.)?(?:youtube\.com\/(?:watch\?(?:.*&)?v=|embed\/|shorts\/|v\/)|youtu\.be\/)([A-Za-z0-9_-]{11})/i,
+  );
+  if (yt) return { kind: "iframe", src: `https://www.youtube.com/embed/${yt[1]}` };
+  // Vimeo
+  const vimeo = url.match(/^(?:https?:\/\/)?(?:www\.)?vimeo\.com\/(\d+)/i);
+  if (vimeo) return { kind: "iframe", src: `https://player.vimeo.com/video/${vimeo[1]}` };
+  // Direct video file
+  if (/\.(mp4|webm|ogg|mov)(\?|$)/i.test(url)) return { kind: "video", src: url };
+  // Generic iframe for anything else that looks like a URL
+  if (/^https?:\/\//i.test(url)) return { kind: "iframe", src: url };
+  return null;
+}
+
 export type ApiGallery = {
   id: string; title: string; caption: string | null; image: string;
   category: string | null; order: number; isPublished: boolean;

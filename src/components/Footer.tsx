@@ -7,8 +7,9 @@ import { motion } from "framer-motion";
 const footerLinks = {
   Company: [
     { href: "/about", label: "About" },
-    { href: "/crew", label: "Crew" },
+    { href: "/team", label: "Our Team" },
     { href: "/news", label: "News" },
+    { href: "/blog", label: "Blog" },
     { href: "/contact", label: "Contact" },
   ],
   Missions: [
@@ -19,6 +20,7 @@ const footerLinks = {
   ],
   Resources: [
     { href: "/gallery", label: "Gallery" },
+    { href: "/blog", label: "Blog" },
     { href: "#", label: "Privacy Policy" },
     { href: "#", label: "Terms of Service" },
   ],

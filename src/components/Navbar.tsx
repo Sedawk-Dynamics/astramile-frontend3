@@ -14,9 +14,10 @@ const links = [
   { href: "/missions", label: "Missions" },
   { href: "/launches", label: "Launches" },
   { href: "/gallery", label: "Gallery" },
-  { href: "/crew", label: "Crew" },
+  { href: "/team", label: "Our Team" },
   { href: "/technology", label: "Technology" },
   { href: "/news", label: "News" },
+  { href: "/blog", label: "Blog" },
   { href: "/contact", label: "Contact" },
 ];
 

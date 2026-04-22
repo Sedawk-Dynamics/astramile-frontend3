@@ -3,12 +3,12 @@
 import { useState } from "react";
 import Image from "next/image";
 import { motion } from "framer-motion";
-import { Rocket, Globe, Award } from "lucide-react";
+import { Briefcase, Globe, Award } from "lucide-react";
 import PageHero from "@/components/PageHero";
 import { LoadingBlock, EmptyBlock, ErrorBlock } from "@/components/DataState";
 import { ApiCrew, resolveImage, usePublicList } from "@/lib/publicApi";
 
-function CrewCard({ person, idx }: { person: ApiCrew; idx: number }) {
+function TeamCard({ person, idx }: { person: ApiCrew; idx: number }) {
   const [flipped, setFlipped] = useState(false);
   const img = resolveImage(person.photo);
 
@@ -31,7 +31,7 @@ function CrewCard({ person, idx }: { person: ApiCrew; idx: number }) {
             <h3 className="text-lg font-bold t-primary mb-0.5">{person.name}</h3>
             <p className="text-accent text-sm mb-4">{person.role}</p>
             <div className="flex justify-center gap-6 text-sm t-muted">
-              <span className="flex items-center gap-1"><Rocket className="w-3.5 h-3.5 text-accent/40" />Crew</span>
+              <span className="flex items-center gap-1"><Briefcase className="w-3.5 h-3.5 text-accent/40" />Team</span>
               {person.nationality && (
                 <span className="flex items-center gap-1"><Globe className="w-3.5 h-3.5 text-teal/40" />{person.nationality}</span>
               )}
@@ -61,23 +61,23 @@ function CrewCard({ person, idx }: { person: ApiCrew; idx: number }) {
   );
 }
 
-export default function CrewPage() {
-  const { data: crew, loading, error } = usePublicList<ApiCrew>("/api/crew");
+export default function TeamPage() {
+  const { data: team, loading, error } = usePublicList<ApiCrew>("/api/crew");
 
   return (
     <div className="page-enter">
-      <PageHero title="Astronaut Crew" subtitle="Meet the brave explorers pushing humanity's boundaries."
-        image="https://images.unsplash.com/photo-1454789548928-9efd52dc4031?w=1400&q=80" label="The Team" />
+      <PageHero title="Our Team" subtitle="Meet the people pushing humanity's boundaries."
+        image="https://images.unsplash.com/photo-1454789548928-9efd52dc4031?w=1400&q=80" label="The People Behind The Missions" />
 
       <section className="py-28 px-5">
-        {loading && <LoadingBlock label="Loading crew…" />}
+        {loading && <LoadingBlock label="Loading team…" />}
         {!loading && error && <ErrorBlock error={error} />}
-        {!loading && !error && crew.length === 0 && (
-          <EmptyBlock title="No crew members yet" hint="Add astronauts in the admin panel to populate this roster." />
+        {!loading && !error && team.length === 0 && (
+          <EmptyBlock title="No team members yet" hint="Add people from the admin panel to populate this page." />
         )}
-        {crew.length > 0 && (
+        {team.length > 0 && (
           <div className="max-w-[1400px] mx-auto grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {crew.map((p, i) => <CrewCard key={p.id} person={p} idx={i} />)}
+            {team.map((p, i) => <TeamCard key={p.id} person={p} idx={i} />)}
           </div>
         )}
       </section>

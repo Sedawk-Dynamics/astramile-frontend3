@@ -70,17 +70,17 @@ export const missionsConfig: ResourceConfig = {
   ],
 };
 
-export const crewConfig: ResourceConfig = {
-  slug: "crew",
-  singular: "Crew member",
-  plural: "Crew",
+export const teamConfig: ResourceConfig = {
+  slug: "team",
+  singular: "Team member",
+  plural: "Our Team",
   apiPath: "/api/crew",
   titleField: "name",
   listColumns: [
     { key: "photo", label: "", render: "image" },
     { key: "name", label: "Name" },
     { key: "role", label: "Role" },
-    { key: "nationality", label: "Nationality" },
+    { key: "nationality", label: "Location" },
     { key: "isPublished", label: "", render: "bool" },
   ],
   fields: [
@@ -88,7 +88,7 @@ export const crewConfig: ResourceConfig = {
     { name: "slug", label: "Slug", type: "slug", derivedFrom: "name" },
     { name: "role", label: "Role / title", type: "text", required: true },
     { name: "bio", label: "Bio", type: "textarea", required: true },
-    { name: "nationality", label: "Nationality", type: "text" },
+    { name: "nationality", label: "Location / nationality", type: "text" },
     { name: "photo", label: "Photo", type: "image" },
     { name: "order", label: "Display order", type: "number", defaultValue: 0 },
     { name: "isPublished", label: "Published on site", type: "boolean", defaultValue: true },
@@ -133,6 +133,35 @@ export const launchesConfig: ResourceConfig = {
     { name: "rocketId", label: "Rocket ID", type: "text", hint: "Paste the rocket's ID (from the Rockets list)" },
     { name: "missionId", label: "Mission ID", type: "text", hint: "Paste the mission's ID (from the Missions list)" },
     { name: "order", label: "Display order", type: "number", defaultValue: 0 },
+    { name: "isPublished", label: "Published on site", type: "boolean", defaultValue: true },
+  ],
+};
+
+export const blogConfig: ResourceConfig = {
+  slug: "blog",
+  singular: "Blog post",
+  plural: "Blog",
+  apiPath: "/api/blog",
+  titleField: "title",
+  listColumns: [
+    { key: "coverImage", label: "", render: "image" },
+    { key: "title", label: "Title" },
+    { key: "category", label: "Category", render: "tag" },
+    { key: "author", label: "Author" },
+    { key: "publishedAt", label: "Published", render: "date" },
+    { key: "isPublished", label: "", render: "bool" },
+  ],
+  fields: [
+    { name: "title", label: "Title", type: "text", required: true },
+    { name: "slug", label: "Slug", type: "slug", derivedFrom: "title" },
+    { name: "category", label: "Category", type: "text", placeholder: "Video, Engineering, Crew Life…" },
+    { name: "author", label: "Author", type: "text", placeholder: "e.g. Cmdr. Sarah Chen" },
+    { name: "excerpt", label: "Excerpt", type: "textarea", required: true, hint: "Short summary shown in listings" },
+    { name: "body", label: "Body", type: "textarea", required: true },
+    { name: "coverImage", label: "Cover image", type: "image" },
+    { name: "videoUrl", label: "Video URL", type: "text", hint: "YouTube, Vimeo, or a direct .mp4 URL. When set, the post renders with an embedded player." },
+    { name: "tags", label: "Tags", type: "tags", hint: "Comma-separated" },
+    { name: "publishedAt", label: "Publication date", type: "datetime" },
     { name: "isPublished", label: "Published on site", type: "boolean", defaultValue: true },
   ],
 };

@@ -20,9 +20,10 @@ type Summary = {
 const CARDS: { key: keyof Summary["counts"]; label: string; href: string }[] = [
   { key: "rockets", label: "Rockets", href: "/admin/rockets" },
   { key: "missions", label: "Missions", href: "/admin/missions" },
-  { key: "crew", label: "Crew", href: "/admin/crew" },
+  { key: "team", label: "Our Team", href: "/admin/team" },
   { key: "launches", label: "Launches", href: "/admin/launches" },
   { key: "news", label: "News", href: "/admin/news" },
+  { key: "blog", label: "Blog", href: "/admin/blog" },
   { key: "gallery", label: "Gallery", href: "/admin/gallery" },
   { key: "technology", label: "Technology", href: "/admin/technology" },
   { key: "unreadContacts", label: "Unread messages", href: "/admin/contact" },
