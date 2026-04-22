@@ -211,20 +211,3 @@ export const technologyConfig: ResourceConfig = {
   ],
 };
 
-export const statsConfig: ResourceConfig = {
-  slug: "stats",
-  singular: "Stat",
-  plural: "Homepage stats",
-  apiPath: "/api/stats",
-  titleField: "label",
-  listColumns: [
-    { key: "label", label: "Label" },
-    { key: "value", label: "Value" },
-    { key: "order", label: "Order" },
-  ],
-  fields: [
-    { name: "label", label: "Label", type: "text", required: true, placeholder: "Success rate" },
-    { name: "value", label: "Value", type: "text", required: true, placeholder: "99.2%" },
-    { name: "order", label: "Display order", type: "number", defaultValue: 0 },
-  ],
-};

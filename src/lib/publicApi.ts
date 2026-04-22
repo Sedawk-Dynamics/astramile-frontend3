@@ -154,5 +154,3 @@ export type ApiAbout = {
   headline: string; body: string; mission: string | null; vision: string | null;
   heroImage: string | null; stats: { label: string; value: string }[];
 };
-
-export type ApiStat = { id: string; label: string; value: string; order: number };

@@ -10,7 +10,7 @@ import Marquee from "@/components/Marquee";
 import MagneticWrap from "@/components/MagneticWrap";
 import ParallaxImage from "@/components/ParallaxImage";
 import {
-  ApiRocket, ApiTech, ApiNews, ApiStat,
+  ApiRocket, ApiTech, ApiNews,
   resolveImage, usePublicList, usePublicSingle, ApiAbout,
 } from "@/lib/publicApi";
 
@@ -43,13 +43,11 @@ export default function Home() {
   const { data: rockets } = usePublicList<ApiRocket>("/api/rockets");
   const { data: techs } = usePublicList<ApiTech>("/api/technology");
   const { data: news } = usePublicList<ApiNews>("/api/news");
-  const { data: siteStats } = usePublicList<ApiStat>("/api/stats");
   const { data: about } = usePublicSingle<ApiAbout>("/api/about");
 
   const topRockets = rockets.slice(0, 3);
   const topTechs = techs.slice(0, 3);
   const topNews = news.slice(0, 3);
-  const miniStats = siteStats.slice(0, 3);
 
   return (
     <div className="page-enter">
@@ -270,21 +268,9 @@ export default function Home() {
                 </motion.p>
               )}
 
-              {miniStats.length > 0 && (
-                <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}
-                  transition={{ delay: 0.4 }}
-                  className="grid grid-cols-3 gap-4 mb-8 py-6" style={{ borderTop: "1px solid var(--border)", borderBottom: "1px solid var(--border)" }}>
-                  {miniStats.map((s) => (
-                    <div key={s.id} className="text-center">
-                      <p className="text-xl font-bold grad-text font-mono">{s.value}</p>
-                      <p className="text-[9px] t-faint uppercase tracking-[0.15em]">{s.label}</p>
-                    </div>
-                  ))}
-                </motion.div>
-              )}
-
               <motion.div initial={{ opacity: 0, y: 15 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}
-                transition={{ delay: 0.5 }}>
+                transition={{ delay: 0.5 }}
+                className="mt-8">
                 <MagneticWrap className="inline-block">
                   <Link href="/about" className="btn btn-accent text-xs">Learn More <ArrowRight className="w-3 h-3" /></Link>
                 </MagneticWrap>

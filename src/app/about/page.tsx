@@ -6,7 +6,7 @@ import { motion, useInView } from "framer-motion";
 import { Rocket, Satellite, Globe, FlaskConical } from "lucide-react";
 import PageHero from "@/components/PageHero";
 import { LoadingBlock, EmptyBlock, ErrorBlock } from "@/components/DataState";
-import { ApiAbout, ApiStat, resolveImage, usePublicSingle, usePublicList } from "@/lib/publicApi";
+import { ApiAbout, resolveImage, usePublicSingle } from "@/lib/publicApi";
 
 const STAT_ICONS = [Rocket, Satellite, Globe, FlaskConical];
 
@@ -34,15 +34,10 @@ function StatCounter({ value, inView }: { value: string; inView: boolean }) {
 
 export default function AboutPage() {
   const { data: about, loading: loadingAbout, error: errorAbout } = usePublicSingle<ApiAbout>("/api/about");
-  const { data: siteStats } = usePublicList<ApiStat>("/api/stats");
   const statsRef = useRef(null);
   const inView = useInView(statsRef, { once: true });
 
-  // Prefer about.stats; if empty, fall back to /api/stats rows; if still empty, show nothing.
-  const stats =
-    (about?.stats && about.stats.length > 0
-      ? about.stats
-      : siteStats.map((s) => ({ label: s.label, value: s.value }))) ?? [];
+  const stats = about?.stats ?? [];
 
   const heroImage = resolveImage(about?.heroImage);
 

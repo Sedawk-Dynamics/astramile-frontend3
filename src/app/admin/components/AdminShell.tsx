@@ -22,7 +22,6 @@ const NAV = [
     group: "Site",
     items: [
       { href: "/admin/about", label: "About page" },
-      { href: "/admin/stats", label: "Homepage stats" },
       { href: "/admin/contact", label: "Contact inbox" },
     ],
   },
