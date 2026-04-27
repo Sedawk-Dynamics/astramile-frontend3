@@ -3,7 +3,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import { motion, useScroll, useTransform } from "framer-motion";
-import { ArrowRight, ArrowUpRight, Zap, Shield, RotateCcw, Rocket } from "lucide-react";
+import { ArrowRight, ArrowUpRight, Zap, Shield, RotateCcw } from "lucide-react";
 import * as LucideIcons from "lucide-react";
 import TextReveal from "@/components/TextReveal";
 import Marquee from "@/components/Marquee";
@@ -56,7 +56,7 @@ export default function Home() {
         <div className="absolute inset-0 z-0">
           <div className="absolute inset-0 overflow-hidden">
             <iframe
-              src="https://www.youtube.com/embed/4F8Heeu5L5U?autoplay=1&mute=1&loop=1&playlist=4F8Heeu5L5U&controls=0&showinfo=0&rel=0&modestbranding=1&playsinline=1&disablekb=1&iv_load_policy=3"
+              src="https://www.youtube-nocookie.com/embed/4F8Heeu5L5U?autoplay=1&mute=1&loop=1&playlist=4F8Heeu5L5U&controls=0&showinfo=0&rel=0&modestbranding=1&playsinline=1&disablekb=1&iv_load_policy=3&fs=0&cc_load_policy=0"
               allow="autoplay; encrypted-media"
               className="absolute top-1/2 left-1/2 pointer-events-none"
               style={{
@@ -68,13 +68,11 @@ export default function Home() {
                 transform: "translate(-50%, -50%)",
               }}
             />
+            <div className="absolute inset-0 z-[1] pointer-events-auto" />
           </div>
           <Image src="/Karman line.webp" alt="Karman line" fill className="object-cover -z-10" sizes="100vw" priority />
           <div className="absolute inset-0" style={{
             background: "linear-gradient(to bottom, rgba(0,0,0,0.3) 0%, rgba(0,0,0,0.15) 40%, rgba(0,0,0,0.6) 100%)",
-          }} />
-          <div className="absolute bottom-0 left-0 right-0 h-32 sm:h-40" style={{
-            background: "linear-gradient(to top, var(--bg), transparent)",
           }} />
         </div>
 
@@ -85,64 +83,53 @@ export default function Home() {
           transition={{ duration: 1.5, ease: [0.22, 1, 0.36, 1] }}
         >
           <Image
-            src="/Astramile A Png.png"
+            src="/astramile-a.svg"
             alt="A"
-            width={800}
-            height={800}
+            width={1010}
+            height={430}
             className="w-[90vw] lg:w-[85vw] h-auto max-w-none saturate-150"
             priority
           />
         </motion.div>
 
-        <motion.div
-          className="absolute bottom-24 left-1/2 -translate-x-1/2 z-10 pointer-events-none md:hidden"
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.5, duration: 1, ease: [0.22, 1, 0.36, 1] }}
-        >
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-10 pointer-events-none w-[80vw] max-w-[420px] md:hidden">
           <Image
-            src="/logos/astramile svg.svg"
-            alt="AstraMile"
-            width={200}
+            src="/astramile fulllogo.svg"
+            alt="AstraMile — Beyond Infinity"
+            width={242}
             height={50}
-            className="w-48 sm:w-56 h-auto"
+            className="w-full h-auto"
             priority
           />
-        </motion.div>
+        </div>
 
-        <motion.div
-          className="absolute bottom-10 right-6 sm:bottom-14 sm:right-10 md:bottom-20 md:right-16 z-20 pointer-events-none hidden md:flex flex-col items-end gap-2"
-          initial={{ opacity: 0, y: 20, filter: "blur(8px)" }}
-          animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
-          transition={{ delay: 5, duration: 1.4, ease: [0.22, 1, 0.36, 1] }}
-        >
-          <Image
-            src="/logos/astramile svg.svg"
-            alt="AstraMile"
-            width={180}
-            height={45}
-            className="w-36 md:w-44 h-auto opacity-95"
-          />
-          <motion.div
-            className="h-px w-full origin-right"
-            style={{ background: "linear-gradient(270deg, var(--accent), var(--accent-warm), transparent)" }}
-            initial={{ scaleX: 0 }}
-            animate={{ scaleX: 1 }}
-            transition={{ delay: 5.5, duration: 1, ease: [0.22, 1, 0.36, 1] }}
-          />
-          <motion.span
-            className="font-display italic text-lg md:text-xl tracking-[0.12em] grad-text"
-            initial={{ opacity: 0, x: 10 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ delay: 5.8, duration: 1, ease: [0.22, 1, 0.36, 1] }}
-          >
-            Beyond Infinity
-          </motion.span>
-        </motion.div>
+        <div className="absolute bottom-14 sm:bottom-16 md:bottom-20 left-1/2 -translate-x-1/2 z-10 pointer-events-none hidden md:flex flex-col items-center gap-2">
+          <div className="type-reveal-stramile w-[70vw] max-w-[640px]">
+            <Image
+              src="/astramile-stramile.svg"
+              alt="AstraMile"
+              width={206}
+              height={24}
+              className="w-full h-auto"
+              priority
+            />
+          </div>
+          <div className="type-reveal-beyond w-[34vw] max-w-[260px]">
+            <Image
+              src="/astramile-beyond.svg"
+              alt="Beyond Infinity"
+              width={54}
+              height={6}
+              className="w-full h-auto"
+              priority
+            />
+          </div>
+        </div>
+
       </section>
 
       {/* ═══ MARQUEE ═══ */}
-      <Marquee items={["Falcon Heavy", "Starship", "Atlas V", "Ariane 5", "PSLV", "GSLV", "Mars", "Moon", "Europa", "Deep Space"]} speed={25} />
+      <Marquee items={["RUDRA","Space", "RUDRAX","India" , "Mars", "Moon", "Astramile","MAHARUDRA", "Deep Space"]} speed={25} />
 
       {/* ═══ ROCKETS ═══ */}
       {topRockets.length > 0 && (
@@ -218,70 +205,57 @@ export default function Home() {
       )}
 
       {/* ═══ ABOUT ═══ */}
-      {(about?.headline || about?.body) && (
-        <section className="relative py-20 sm:py-28 md:py-36 px-4 sm:px-5 overflow-hidden">
-          <div className="aurora-bg opacity-30" />
+      <section className="relative py-20 sm:py-28 md:py-36 px-4 sm:px-5 overflow-hidden">
+        <div className="aurora-bg opacity-30" />
 
-          <div className="relative z-10 max-w-[1400px] mx-auto">
-            <div className="watermark-top">About</div>
-          </div>
-          <div className="relative z-10 max-w-[1400px] mx-auto grid lg:grid-cols-2 gap-10 md:gap-16 items-center">
-            <motion.div
-              initial={{ opacity: 0, x: -60, filter: "blur(8px)" }}
-              whileInView={{ opacity: 1, x: 0, filter: "blur(0px)" }}
-              viewport={{ once: true }}
-              transition={{ duration: 1, ease: [0.22, 1, 0.36, 1] }}>
-              <div className="relative">
-                <ParallaxImage
-                  src={resolveImage(about.heroImage) ?? "https://images.unsplash.com/photo-1446776811953-b23d57bd21aa?w=900&q=80"}
-                  alt="About"
-                  className="aspect-[4/3]"
-                  speed={0.1}
-                />
-              </div>
+        <div className="relative z-10 max-w-[1400px] mx-auto">
+          <div className="watermark-top">About</div>
+        </div>
+        <div className="relative z-10 max-w-[1400px] mx-auto grid lg:grid-cols-2 gap-10 md:gap-16 items-center">
+          <motion.div
+            initial={{ opacity: 0, x: -60, filter: "blur(8px)" }}
+            whileInView={{ opacity: 1, x: 0, filter: "blur(0px)" }}
+            viewport={{ once: true }}
+            transition={{ duration: 1, ease: [0.22, 1, 0.36, 1] }}>
+            <div className="relative">
+              <ParallaxImage
+                src={resolveImage(about?.heroImage) ?? "https://images.unsplash.com/photo-1446776811953-b23d57bd21aa?w=900&q=80"}
+                alt="About"
+                className="aspect-[4/3]"
+                speed={0.1}
+              />
+            </div>
+          </motion.div>
+
+          <motion.div
+            initial={{ opacity: 0, x: 60 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.8 }}>
+            <motion.span initial={{ opacity: 0, x: -20 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }}
+              className="section-num block mb-4">02 &mdash; About</motion.span>
+            <h2 className="font-display text-3xl md:text-4xl mb-6">
+              <TextReveal>India&apos;s First Full-Stack Orbital Launch Company</TextReveal>
+            </h2>
+            <motion.p initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}
+              transition={{ delay: 0.2 }}
+              className="t-secondary leading-relaxed mb-4">
+              Astramile Aerospace Private Limited is India&apos;s first full-stack private orbital launch company, building a complete ecosystem of liquid propellant rockets and satellites from a 100-acre integrated campus in Hyderabad. Founded in December 2025 by a team of ex-ISRO/DRDO veterans and defence professionals, Astramile is developing the Rudra series of all-liquid LOX/RP-1 rockets — from small satellite launchers to heavy-lift and lunar mission vehicles — powered by a single scalable 10-ton engine platform. Our mission: to make India a global leader in affordable, reliable, and reusable orbital access.
+            </motion.p>
+
+            <motion.div initial={{ opacity: 0, y: 15 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}
+              transition={{ delay: 0.5 }}
+              className="mt-8">
+              <MagneticWrap className="inline-block">
+                <Link href="/about" className="btn btn-accent text-xs">Learn More <ArrowRight className="w-3 h-3" /></Link>
+              </MagneticWrap>
             </motion.div>
-
-            <motion.div
-              initial={{ opacity: 0, x: 60 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.8 }}>
-              <motion.span initial={{ opacity: 0, x: -20 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }}
-                className="section-num block mb-4">02 &mdash; About</motion.span>
-              {about.headline && (
-                <h2 className="font-display text-3xl md:text-4xl mb-6">
-                  <TextReveal>{about.headline}</TextReveal>
-                </h2>
-              )}
-              {about.body && (
-                <motion.p initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}
-                  transition={{ delay: 0.2 }}
-                  className="t-secondary leading-relaxed mb-4">
-                  {about.body}
-                </motion.p>
-              )}
-              {about.mission && (
-                <motion.p initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}
-                  transition={{ delay: 0.3 }}
-                  className="t-muted leading-relaxed mb-8">
-                  {about.mission}
-                </motion.p>
-              )}
-
-              <motion.div initial={{ opacity: 0, y: 15 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}
-                transition={{ delay: 0.5 }}
-                className="mt-8">
-                <MagneticWrap className="inline-block">
-                  <Link href="/about" className="btn btn-accent text-xs">Learn More <ArrowRight className="w-3 h-3" /></Link>
-                </MagneticWrap>
-              </motion.div>
-            </motion.div>
-          </div>
-        </section>
-      )}
+          </motion.div>
+        </div>
+      </section>
 
       {/* ═══ MARQUEE 2 ═══ */}
-      <Marquee items={["Innovation", "Exploration", "Discovery", "Technology", "Future", "Beyond", "Cosmos", "Pioneer"]} speed={35} />
+      <Marquee items={["Innovation", "Exploration", "Discovery", "Technology", "Future", "Beyond", "Pioneer"]} speed={35} />
 
       {/* ═══ TECH ═══ */}
       {topTechs.length > 0 && (
@@ -482,14 +456,6 @@ export default function Home() {
             whileInView={{ opacity: 1, y: 0, filter: "blur(0px)" }}
             viewport={{ once: true }}
             transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}>
-
-            <motion.div
-              className="w-16 h-16 mx-auto mb-8 rounded-2xl flex items-center justify-center"
-              style={{ background: "rgba(125,180,224,0.08)", border: "1px solid rgba(125,180,224,0.2)" }}
-              animate={{ y: [0, -8, 0] }}
-              transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}>
-              <Rocket className="w-7 h-7 text-accent" />
-            </motion.div>
 
             <h2 className="font-display text-3xl sm:text-4xl md:text-6xl mb-6">
               <TextReveal>Ready to Explore?</TextReveal>

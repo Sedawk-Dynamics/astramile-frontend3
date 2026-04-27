@@ -590,6 +590,24 @@ body {
   100% { top: 110%; }
 }
 
+/* ─── Typing reveal (wordmark) ─── */
+@keyframes type-reveal {
+  from { clip-path: inset(0 100% 0 0); }
+  to { clip-path: inset(0 0% 0 0); }
+}
+.type-reveal {
+  clip-path: inset(0 100% 0 0);
+  animation: type-reveal 2.6s steps(22) 0.8s forwards;
+}
+.type-reveal-stramile {
+  clip-path: inset(0 100% 0 0);
+  animation: type-reveal 1.6s steps(8) 0.8s forwards;
+}
+.type-reveal-beyond {
+  clip-path: inset(0 100% 0 0);
+  animation: type-reveal 1.6s steps(14) 2.6s forwards;
+}
+
 @media (max-width: 768px) {
   .grain-overlay { display: none; }
 }
