@@ -5,15 +5,12 @@ import { api } from "../lib/api";
 import PageHeader from "../components/PageHeader";
 import ImagePicker from "../components/ImagePicker";
 
-type Stat = { label: string; value: string };
-
 type About = {
   headline: string;
   body: string;
   mission: string | null;
   vision: string | null;
   heroImage: string | null;
-  stats: Stat[];
 };
 
 const EMPTY: About = {
@@ -22,7 +19,6 @@ const EMPTY: About = {
   mission: "",
   vision: "",
   heroImage: null,
-  stats: [],
 };
 
 export default function AboutPage() {
@@ -34,7 +30,7 @@ export default function AboutPage() {
   useEffect(() => {
     api
       .get<About>("/api/about")
-      .then((d) => setData({ ...EMPTY, ...d, stats: Array.isArray(d.stats) ? d.stats : [] }))
+      .then((d) => setData({ ...EMPTY, ...d }))
       .catch((e) => setErr(e instanceof Error ? e.message : String(e)));
   }, []);
 
@@ -51,7 +47,6 @@ export default function AboutPage() {
         mission: data.mission || null,
         vision: data.vision || null,
         heroImage: data.heroImage || null,
-        stats: data.stats,
       });
       setOk(true);
     } catch (e) {
@@ -63,23 +58,6 @@ export default function AboutPage() {
 
   if (!data && !err) return <div className="admin-loading">Loading…</div>;
   if (!data) return <div className="admin-alert error">{err}</div>;
-
-  function updateStat(i: number, k: keyof Stat, v: string) {
-    setData((d) => {
-      if (!d) return d;
-      const stats = [...d.stats];
-      stats[i] = { ...stats[i], [k]: v };
-      return { ...d, stats };
-    });
-  }
-
-  function addStat() {
-    setData((d) => (d ? { ...d, stats: [...d.stats, { label: "", value: "" }] } : d));
-  }
-
-  function removeStat(i: number) {
-    setData((d) => (d ? { ...d, stats: d.stats.filter((_, idx) => idx !== i) } : d));
-  }
 
   return (
     <form onSubmit={save}>
@@ -125,31 +103,6 @@ export default function AboutPage() {
             value={data.heroImage}
             onChange={(url) => setData({ ...data, heroImage: url })}
           />
-
-          <div className="admin-field">
-            <label>Stats</label>
-            {data.stats.length === 0 && (
-              <div className="hint" style={{ marginBottom: 10 }}>No stats yet.</div>
-            )}
-            {data.stats.map((s, i) => (
-              <div key={i} className="admin-repeater-row">
-                <input
-                  type="text"
-                  placeholder="Label"
-                  value={s.label}
-                  onChange={(e) => updateStat(i, "label", e.target.value)}
-                />
-                <input
-                  type="text"
-                  placeholder="Value"
-                  value={s.value}
-                  onChange={(e) => updateStat(i, "value", e.target.value)}
-                />
-                <button type="button" className="admin-btn small danger" onClick={() => removeStat(i)}>Remove</button>
-              </div>
-            ))}
-            <button type="button" className="admin-btn" onClick={addStat}>+ Add stat</button>
-          </div>
         </div>
       </div>
 

@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import Image from "next/image";
 import { motion } from "framer-motion";
-import { MapPin, Target, Clock, AlertCircle, Play, RotateCcw } from "lucide-react";
+import { MapPin, Target, Clock, AlertCircle } from "lucide-react";
 import PageHero from "@/components/PageHero";
 import { LoadingBlock, EmptyBlock, ErrorBlock } from "@/components/DataState";
 import { ApiLaunch, resolveImage, usePublicList } from "@/lib/publicApi";
@@ -40,48 +40,6 @@ function Countdown({ target }: { target: Date }) {
   );
 }
 
-type Phase = "idle" | "countdown" | "ignition" | "liftoff" | "flight";
-
-function LaunchSim() {
-  const [phase, setPhase] = useState<Phase>("idle");
-  const [count, setCount] = useState(10);
-
-  useEffect(() => {
-    if (phase !== "countdown") return;
-    if (count <= 0) {
-      setPhase("ignition");
-      const t1 = setTimeout(() => setPhase("liftoff"), 1500);
-      const t2 = setTimeout(() => setPhase("flight"), 3500);
-      return () => { clearTimeout(t1); clearTimeout(t2); };
-    }
-    const i = setInterval(() => setCount((c) => c - 1), 1000);
-    return () => clearInterval(i);
-  }, [phase, count]);
-
-  return (
-    <div className="card p-8 text-center gradient-border">
-      <h3 className="text-xl font-bold grad-text mb-6">Launch Simulation</h3>
-      <div className="relative h-64 rounded-xl overflow-hidden mb-6" style={{ background: "linear-gradient(to bottom, var(--bg-alt), var(--bg))" }}>
-        {(phase === "liftoff" || phase === "flight") && Array.from({ length: 30 }).map((_, i) => (
-          <div key={i} className="absolute w-0.5 h-0.5 rounded-full animate-twinkle" style={{ left: `${Math.random() * 100}%`, top: `${Math.random() * 60}%`, animationDelay: `${Math.random() * 2}s`, background: "var(--accent)" }} />
-        ))}
-        <motion.div animate={phase === "flight" ? { y: -300, scale: 0.3 } : phase === "liftoff" ? { y: -150 } : phase === "ignition" ? { y: [0, 2, -2, 0] } : { y: 0 }}
-          transition={phase === "flight" ? { duration: 3 } : phase === "ignition" ? { duration: 0.3, repeat: Infinity } : { duration: 2 }}
-          className="absolute bottom-16 left-1/2 -translate-x-1/2 text-5xl select-none">
-          🚀
-          {(phase === "ignition" || phase === "liftoff" || phase === "flight") && (
-            <div className="absolute -bottom-4 left-1/2 -translate-x-1/2 w-4 h-10 rounded-b-full animate-pulse" style={{ background: "linear-gradient(to bottom, var(--accent-warm), var(--accent), transparent)" }} />
-          )}
-        </motion.div>
-        {phase === "countdown" && <div className="absolute inset-0 flex items-center justify-center text-7xl font-bold font-mono" style={{ color: "var(--accent)", opacity: 0.8 }}>{count}</div>}
-        {phase === "flight" && <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="absolute inset-0 flex items-center justify-center text-xl font-bold grad-text">LAUNCH SUCCESSFUL</motion.p>}
-      </div>
-      {phase === "idle" && <button onClick={() => { setPhase("countdown"); setCount(10); }} className="btn btn-accent"><Play className="w-4 h-4" /> Initiate Launch</button>}
-      {phase === "flight" && <button onClick={() => { setPhase("idle"); setCount(10); }} className="btn btn-ice"><RotateCcw className="w-4 h-4" /> Reset</button>}
-    </div>
-  );
-}
-
 export default function LaunchesPage() {
   const { data: launches, loading, error } = usePublicList<ApiLaunch>("/api/launches");
 
@@ -99,7 +57,7 @@ export default function LaunchesPage() {
           )}
 
           {launches.length > 0 && (
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-5 mb-16">
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-5">
               {launches.map((l, i) => {
                 const img = resolveImage(l.image);
                 const target = new Date(l.scheduledAt);
@@ -135,8 +93,6 @@ export default function LaunchesPage() {
               })}
             </div>
           )}
-
-          <LaunchSim />
         </div>
       </section>
     </div>

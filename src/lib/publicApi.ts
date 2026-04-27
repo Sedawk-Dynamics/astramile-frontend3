@@ -178,5 +178,5 @@ export type ApiTech = {
 
 export type ApiAbout = {
   headline: string; body: string; mission: string | null; vision: string | null;
-  heroImage: string | null; stats: { label: string; value: string }[];
+  heroImage: string | null;
 };

@@ -1,44 +1,13 @@
 "use client";
 
-import { useRef, useEffect, useState } from "react";
 import Image from "next/image";
-import { motion, useInView } from "framer-motion";
-import { Rocket, Satellite, Globe, FlaskConical } from "lucide-react";
+import { motion } from "framer-motion";
 import PageHero from "@/components/PageHero";
 import { LoadingBlock, EmptyBlock, ErrorBlock } from "@/components/DataState";
 import { ApiAbout, resolveImage, usePublicSingle } from "@/lib/publicApi";
 
-const STAT_ICONS = [Rocket, Satellite, Globe, FlaskConical];
-
-function StatCounter({ value, inView }: { value: string; inView: boolean }) {
-  const [display, setDisplay] = useState("0");
-  useEffect(() => {
-    if (!inView) return;
-    const match = value.match(/^([\d,.]+)(.*)$/);
-    if (!match) { setDisplay(value); return; }
-    const target = Number(match[1].replace(/,/g, ""));
-    if (Number.isNaN(target)) { setDisplay(value); return; }
-    const suffix = match[2] ?? "";
-    const dur = 1800;
-    const start = Date.now();
-    const timer = setInterval(() => {
-      const p = Math.min((Date.now() - start) / dur, 1);
-      const eased = 1 - Math.pow(1 - p, 3);
-      setDisplay(Math.floor(eased * target).toLocaleString() + suffix);
-      if (p >= 1) clearInterval(timer);
-    }, 16);
-    return () => clearInterval(timer);
-  }, [inView, value]);
-  return <span>{display}</span>;
-}
-
 export default function AboutPage() {
   const { data: about, loading: loadingAbout, error: errorAbout } = usePublicSingle<ApiAbout>("/api/about");
-  const statsRef = useRef(null);
-  const inView = useInView(statsRef, { once: true });
-
-  const stats = about?.stats ?? [];
-
   const heroImage = resolveImage(about?.heroImage);
 
   return (
@@ -55,7 +24,7 @@ export default function AboutPage() {
       {!loadingAbout && !errorAbout && !about?.headline && !about?.body && (
         <EmptyBlock
           title="No About content yet"
-          hint="Open the admin panel ▸ About page to write the headline, body, mission, vision, and stats."
+          hint="Open the admin panel ▸ About page to write the headline, body, mission, and vision."
         />
       )}
 
@@ -79,27 +48,6 @@ export default function AboutPage() {
                 <div className="absolute inset-0 bg-gradient-to-t from-bg/50 to-transparent" />
               </motion.div>
             )}
-          </div>
-        </section>
-      )}
-
-      {stats.length > 0 && (
-        <section ref={statsRef} className="py-20 px-5">
-          <div className="max-w-[1400px] mx-auto grid grid-cols-2 md:grid-cols-4 gap-5">
-            {stats.map((s, i) => {
-              const IconComp = STAT_ICONS[i % STAT_ICONS.length];
-              return (
-                <motion.div key={s.label + i} initial={{ opacity: 0, y: 30, filter: "blur(4px)" }} whileInView={{ opacity: 1, y: 0, filter: "blur(0px)" }}
-                  viewport={{ once: true }} transition={{ delay: i * 0.1, duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
-                  className="card p-6 text-center gradient-border">
-                  <IconComp className="w-6 h-6 text-accent/60 mx-auto mb-3" />
-                  <p className="text-3xl font-bold grad-text mb-1">
-                    <StatCounter value={s.value} inView={inView} />
-                  </p>
-                  <p className="text-[11px] t-muted uppercase tracking-wider">{s.label}</p>
-                </motion.div>
-              );
-            })}
           </div>
         </section>
       )}
