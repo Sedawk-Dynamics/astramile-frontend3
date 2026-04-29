@@ -8,9 +8,9 @@ import PageHero from "@/components/PageHero";
 import { postJson } from "@/lib/publicApi";
 
 const info = [
-  { icon: MapPin, label: "Headquarters", value: "Kennedy Space Center, FL 32899" },
+  { icon: MapPin, label: "Headquarters", value: "Hyderabad, Telangana, India" },
   { icon: Phone, label: "Mission Control", value: "+1 (321) 867-5309" },
-  { icon: Mail, label: "Email", value: "contact@astramile.space" },
+  { icon: Mail, label: "Email", value: "contact@astramile.in" },
   { icon: Clock, label: "Operations", value: "24/7 Mission Support" },
 ];
 
@@ -69,7 +69,7 @@ export default function ContactPage() {
                 <div className="absolute inset-0 bg-bg/60 flex items-center justify-center">
                   <div className="text-center">
                     <MapPin className="w-6 h-6 text-accent mx-auto mb-2" />
-                    <p className="text-xs t-secondary">Cape Canaveral, FL</p>
+                    <p className="text-xs t-secondary">Hyderabad, Telangana, India</p>
                   </div>
                 </div>
               </motion.div>

@@ -114,7 +114,7 @@ export const launchesConfig: ResourceConfig = {
     { name: "slug", label: "Slug", type: "slug", derivedFrom: "name" },
     { name: "description", label: "Description", type: "textarea" },
     { name: "scheduledAt", label: "Scheduled at", type: "datetime", required: true },
-    { name: "launchSite", label: "Launch site", type: "text", placeholder: "LC-39A, Kennedy…" },
+    { name: "launchSite", label: "Launch site", type: "text", placeholder: "Sriharikota, Andhra Pradesh…" },
     {
       name: "status",
       label: "Status",
