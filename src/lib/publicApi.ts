@@ -94,10 +94,14 @@ export async function postJson<T>(path: string, body: unknown): Promise<T> {
   if (!res.ok) {
     let detail: unknown = undefined;
     try { detail = await res.json(); } catch { /* ignore */ }
-    throw new Error(
-      (detail && typeof detail === "object" && "error" in (detail as object) && String((detail as { error: unknown }).error))
-      || `Request failed (${res.status})`,
-    );
+    const apiError =
+      detail &&
+      typeof detail === "object" &&
+      "error" in detail &&
+      typeof detail.error === "string"
+        ? detail.error
+        : undefined;
+    throw new Error(apiError ?? `Request failed (${res.status})`);
   }
   return (await res.json()) as T;
 }
