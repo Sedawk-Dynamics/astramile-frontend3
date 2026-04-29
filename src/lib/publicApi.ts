@@ -5,11 +5,24 @@ import { useEffect, useState } from "react";
 export const API_BASE =
   process.env.NEXT_PUBLIC_API_BASE?.replace(/\/$/, "") ?? "http://localhost:4000";
 
-/** Resolve a stored image URL. Absolute http(s) URLs are returned as-is; `/uploads/...` is prefixed with the API base. */
+/**
+ * Resolve a stored image URL.
+ * - Absolute http(s) URLs → returned as-is (e.g. Unsplash links).
+ * - `/uploads/...` → returned as-is so it loads same-origin via the Next.js
+ *   rewrite to the backend (see next.config.ts). This avoids cross-origin
+ *   issues with next/image's optimizer.
+ */
 export function resolveImage(pathOrUrl: string | null | undefined): string | null {
   if (!pathOrUrl) return null;
-  if (/^https?:\/\//i.test(pathOrUrl)) return pathOrUrl;
-  if (pathOrUrl.startsWith("/uploads/")) return `${API_BASE}${pathOrUrl}`;
+  if (/^https?:\/\//i.test(pathOrUrl)) {
+    // Strip a stale absolute API base prefix that may exist in older rows;
+    // leave any other absolute URL untouched.
+    if (pathOrUrl.startsWith(`${API_BASE}/uploads/`)) {
+      return pathOrUrl.slice(API_BASE.length);
+    }
+    return pathOrUrl;
+  }
+  if (pathOrUrl.startsWith("/uploads/")) return pathOrUrl;
   return pathOrUrl || null;
 }
 
