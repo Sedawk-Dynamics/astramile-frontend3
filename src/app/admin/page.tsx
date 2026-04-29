@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { api } from "./lib/api";
 import PageHeader from "./components/PageHeader";
+import { useToast } from "./components/Toast";
 
 type Summary = {
   counts: Record<string, number>;
@@ -20,7 +21,7 @@ type Summary = {
 const CARDS: { key: keyof Summary["counts"]; label: string; href: string }[] = [
   { key: "rockets", label: "Rockets", href: "/admin/rockets" },
   { key: "missions", label: "Missions", href: "/admin/missions" },
-  { key: "team", label: "Our Team", href: "/admin/team" },
+  { key: "team", label: "Team & Promoters", href: "/admin/team" },
   { key: "launches", label: "Launches", href: "/admin/launches" },
   { key: "news", label: "News", href: "/admin/news" },
   { key: "blog", label: "Blog", href: "/admin/blog" },
@@ -30,21 +31,29 @@ const CARDS: { key: keyof Summary["counts"]; label: string; href: string }[] = [
 ];
 
 export default function DashboardPage() {
+  const toast = useToast();
   const [data, setData] = useState<Summary | null>(null);
-  const [err, setErr] = useState<string | null>(null);
+  const [loadError, setLoadError] = useState<string | null>(null);
 
   useEffect(() => {
     api
       .get<Summary>("/api/dashboard/summary")
       .then(setData)
-      .catch((e) => setErr(e instanceof Error ? e.message : String(e)));
+      .catch((e) => {
+        const msg = e instanceof Error ? e.message : String(e);
+        setLoadError(msg);
+        toast.error(msg, "Failed to load");
+      });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
     <div>
       <PageHeader title="Dashboard" breadcrumb="Overview" />
-      {err && <div className="admin-alert error">{err}</div>}
-      {!data && !err && <div className="admin-loading">Loading…</div>}
+      {!data && !loadError && <div className="admin-loading">Loading…</div>}
+      {loadError && !data && (
+        <div className="admin-empty">Couldn’t load dashboard. {loadError}</div>
+      )}
 
       {data && (
         <>

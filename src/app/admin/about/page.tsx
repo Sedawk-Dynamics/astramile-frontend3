@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { api } from "../lib/api";
 import PageHeader from "../components/PageHeader";
 import ImagePicker from "../components/ImagePicker";
+import { useToast } from "../components/Toast";
 
 type About = {
   headline: string;
@@ -22,24 +23,27 @@ const EMPTY: About = {
 };
 
 export default function AboutPage() {
+  const toast = useToast();
   const [data, setData] = useState<About | null>(null);
-  const [err, setErr] = useState<string | null>(null);
+  const [loadError, setLoadError] = useState<string | null>(null);
   const [saving, setSaving] = useState(false);
-  const [ok, setOk] = useState(false);
 
   useEffect(() => {
     api
       .get<About>("/api/about")
       .then((d) => setData({ ...EMPTY, ...d }))
-      .catch((e) => setErr(e instanceof Error ? e.message : String(e)));
+      .catch((e) => {
+        const msg = e instanceof Error ? e.message : String(e);
+        setLoadError(msg);
+        toast.error(msg, "Failed to load");
+      });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   async function save(e: React.FormEvent) {
     e.preventDefault();
     if (!data) return;
     setSaving(true);
-    setErr(null);
-    setOk(false);
     try {
       await api.put("/api/about", {
         headline: data.headline,
@@ -48,22 +52,20 @@ export default function AboutPage() {
         vision: data.vision || null,
         heroImage: data.heroImage || null,
       });
-      setOk(true);
+      toast.success("About page saved.");
     } catch (e) {
-      setErr(e instanceof Error ? e.message : "Save failed");
+      toast.error(e instanceof Error ? e.message : "Save failed", "Save failed");
     } finally {
       setSaving(false);
     }
   }
 
-  if (!data && !err) return <div className="admin-loading">Loading…</div>;
-  if (!data) return <div className="admin-alert error">{err}</div>;
+  if (!data && !loadError) return <div className="admin-loading">Loading…</div>;
+  if (!data) return <div className="admin-empty">Couldn’t load the About page. {loadError}</div>;
 
   return (
     <form onSubmit={save}>
-      <PageHeader title="About page" breadcrumb="Site" />
-      {err && <div className="admin-alert error">{err}</div>}
-      {ok && <div className="admin-alert ok">Saved.</div>}
+      <PageHeader title="About page" breadcrumb="Site" back="/admin" />
 
       <div className="admin-card">
         <div className="admin-form">

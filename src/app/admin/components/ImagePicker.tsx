@@ -2,6 +2,7 @@
 
 import { useRef, useState } from "react";
 import { api, assetUrl } from "../lib/api";
+import { useToast } from "./Toast";
 
 type Props = {
   value: string | null | undefined;
@@ -13,18 +14,18 @@ type Props = {
 export default function ImagePicker({ value, onChange, label = "Image", hint }: Props) {
   const inputRef = useRef<HTMLInputElement>(null);
   const [uploading, setUploading] = useState(false);
-  const [err, setErr] = useState<string | null>(null);
+  const toast = useToast();
 
   async function handleFile(e: React.ChangeEvent<HTMLInputElement>) {
     const file = e.target.files?.[0];
     if (!file) return;
     setUploading(true);
-    setErr(null);
     try {
       const res = await api.upload<{ url: string }>("/api/upload/image", file);
       onChange(res.url);
+      toast.success("Image uploaded.");
     } catch (e) {
-      setErr(e instanceof Error ? e.message : "Upload failed");
+      toast.error(e instanceof Error ? e.message : "Upload failed", "Upload failed");
     } finally {
       setUploading(false);
       if (inputRef.current) inputRef.current.value = "";
@@ -73,7 +74,6 @@ export default function ImagePicker({ value, onChange, label = "Image", hint }: 
         </div>
       </div>
       {hint && <div className="hint">{hint}</div>}
-      {err && <div className="hint" style={{ color: "var(--a-danger)" }}>{err}</div>}
     </div>
   );
 }

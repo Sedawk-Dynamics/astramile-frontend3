@@ -11,7 +11,7 @@ const NAV = [
     items: [
       { href: "/admin/rockets", label: "Rockets" },
       { href: "/admin/missions", label: "Missions" },
-      { href: "/admin/team", label: "Our Team" },
+      { href: "/admin/team", label: "Team & Promoters" },
       { href: "/admin/launches", label: "Launches" },
       { href: "/admin/news", label: "News" },
       { href: "/admin/blog", label: "Blog" },

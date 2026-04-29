@@ -6,6 +6,7 @@ import { api, ApiError } from "../lib/api";
 import { Field, ResourceConfig } from "./ResourceConfig";
 import PageHeader from "./PageHeader";
 import ImagePicker from "./ImagePicker";
+import { useToast } from "./Toast";
 
 type Values = Record<string, unknown>;
 
@@ -65,12 +66,11 @@ export default function ResourceForm({
   id?: string;
 }) {
   const router = useRouter();
+  const toast = useToast();
   const isNew = !id;
   const [values, setValues] = useState<Values>(() => buildDefaults(config));
   const [loading, setLoading] = useState(!isNew);
-  const [err, setErr] = useState<string | null>(null);
   const [saving, setSaving] = useState(false);
-  const [ok, setOk] = useState(false);
 
   useEffect(() => {
     if (isNew) return;
@@ -94,8 +94,9 @@ export default function ResourceForm({
         }
         setValues(v);
       })
-      .catch((e) => setErr(e instanceof Error ? e.message : String(e)))
+      .catch((e) => toast.error(e instanceof Error ? e.message : String(e), "Failed to load"))
       .finally(() => setLoading(false));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id, isNew, config]);
 
   function set(name: string, v: unknown) {
@@ -105,27 +106,26 @@ export default function ResourceForm({
   async function save(e: React.FormEvent) {
     e.preventDefault();
     setSaving(true);
-    setErr(null);
-    setOk(false);
     try {
       const payload = cleanForSend(config.fields, values);
       if (isNew) {
         const created = await api.post<{ id: string }>(config.apiPath, payload);
+        toast.success(`${config.singular} created.`);
         router.replace(`/admin/${config.slug}/${created.id}`);
       } else {
         await api.patch(`${config.apiPath}/${id}`, payload);
-        setOk(true);
+        toast.success("Changes saved.");
       }
     } catch (e) {
-      if (e instanceof ApiError) {
-        setErr(
-          e.details && typeof e.details === "object" && "issues" in (e.details as object)
+      const msg =
+        e instanceof ApiError
+          ? e.details && typeof e.details === "object" && "issues" in (e.details as object)
             ? `Validation error: ${JSON.stringify((e.details as { issues: unknown }).issues)}`
-            : e.message,
-        );
-      } else {
-        setErr(e instanceof Error ? e.message : "Save failed");
-      }
+            : e.message
+          : e instanceof Error
+            ? e.message
+            : "Save failed";
+      toast.error(msg, "Save failed");
     } finally {
       setSaving(false);
     }
@@ -138,9 +138,8 @@ export default function ResourceForm({
       <PageHeader
         title={isNew ? `New ${config.singular}` : String(values[config.titleField] ?? config.singular)}
         breadcrumb={`${config.plural} / ${isNew ? "New" : "Edit"}`}
+        back={`/admin/${config.slug}`}
       />
-      {err && <div className="admin-alert error">{err}</div>}
-      {ok && <div className="admin-alert ok">Saved.</div>}
 
       <div className="admin-card">
         <div className="admin-form">

@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import AdminShell from "./components/AdminShell";
 import { AuthProvider } from "./lib/auth";
+import { ToastProvider } from "./components/Toast";
+import { ConfirmProvider } from "./components/ConfirmDialog";
 import "./admin.css";
 
 export const metadata: Metadata = {
@@ -11,7 +13,11 @@ export const metadata: Metadata = {
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
   return (
     <AuthProvider>
-      <AdminShell>{children}</AdminShell>
+      <ToastProvider>
+        <ConfirmProvider>
+          <AdminShell>{children}</AdminShell>
+        </ConfirmProvider>
+      </ToastProvider>
     </AuthProvider>
   );
 }

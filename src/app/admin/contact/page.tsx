@@ -3,6 +3,8 @@
 import { useEffect, useState } from "react";
 import { api } from "../lib/api";
 import PageHeader from "../components/PageHeader";
+import { useToast } from "../components/Toast";
+import { useConfirm } from "../components/ConfirmDialog";
 
 type Submission = {
   id: string;
@@ -15,47 +17,65 @@ type Submission = {
 };
 
 export default function ContactInboxPage() {
+  const toast = useToast();
+  const confirm = useConfirm();
   const [rows, setRows] = useState<Submission[] | null>(null);
-  const [err, setErr] = useState<string | null>(null);
+  const [loadError, setLoadError] = useState<string | null>(null);
   const [open, setOpen] = useState<Submission | null>(null);
 
   async function load() {
     try {
       const data = await api.get<Submission[]>("/api/contact");
       setRows(data);
+      setLoadError(null);
     } catch (e) {
-      setErr(e instanceof Error ? e.message : String(e));
+      const msg = e instanceof Error ? e.message : String(e);
+      setLoadError(msg);
+      toast.error(msg, "Failed to load");
     }
   }
 
-  useEffect(() => { load(); }, []);
+  useEffect(() => {
+    load();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   async function markRead(row: Submission, isRead: boolean) {
     try {
       await api.patch(`/api/contact/${row.id}`, { isRead });
       setRows((r) => r?.map((x) => (x.id === row.id ? { ...x, isRead } : x)) ?? null);
       if (open?.id === row.id) setOpen({ ...row, isRead });
+      toast.success(isRead ? "Marked as read." : "Marked as unread.");
     } catch (e) {
-      alert(e instanceof Error ? e.message : "Update failed");
+      toast.error(e instanceof Error ? e.message : "Update failed", "Update failed");
     }
   }
 
   async function remove(row: Submission) {
-    if (!confirm(`Delete message from ${row.name}?`)) return;
+    const ok = await confirm({
+      title: "Delete message?",
+      message: `Delete the message from ${row.name}? This cannot be undone.`,
+      confirmLabel: "Delete",
+      destructive: true,
+    });
+    if (!ok) return;
     try {
       await api.delete(`/api/contact/${row.id}`);
       setRows((r) => r?.filter((x) => x.id !== row.id) ?? null);
       if (open?.id === row.id) setOpen(null);
+      toast.success("Message deleted.");
     } catch (e) {
-      alert(e instanceof Error ? e.message : "Delete failed");
+      toast.error(e instanceof Error ? e.message : "Delete failed", "Delete failed");
     }
   }
 
   return (
     <div>
-      <PageHeader title="Contact inbox" breadcrumb="Site" />
-      {err && <div className="admin-alert error">{err}</div>}
-      {!rows && !err && <div className="admin-loading">Loading…</div>}
+      <PageHeader title="Contact inbox" breadcrumb="Site" back="/admin" />
+      {!rows && !loadError && <div className="admin-loading">Loading…</div>}
+      {loadError && !rows && (
+        <div className="admin-empty">Couldn’t load messages. {loadError}</div>
+      )}
       {rows && rows.length === 0 && (
         <div className="admin-empty">No messages yet.</div>
       )}
@@ -68,7 +88,7 @@ export default function ContactInboxPage() {
                 <th>From</th>
                 <th>Subject</th>
                 <th>Received</th>
-                <th style={{ width: 180, textAlign: "right" }}>Actions</th>
+                <th style={{ width: 220, textAlign: "right" }}>Actions</th>
               </tr>
             </thead>
             <tbody>
@@ -106,6 +126,7 @@ export default function ContactInboxPage() {
       {open && (
         <div
           role="dialog"
+          aria-modal="true"
           className="admin-modal-backdrop"
           onClick={() => setOpen(null)}
         >

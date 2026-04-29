@@ -125,7 +125,9 @@ export type ApiMission = {
 
 export type ApiCrew = {
   id: string; slug: string; name: string; role: string; bio: string;
-  nationality: string | null; photo: string | null; order: number; isPublished: boolean;
+  nationality: string | null; photo: string | null;
+  category: "PROMOTER" | "TEAM";
+  order: number; isPublished: boolean;
 };
 
 export type ApiLaunch = {

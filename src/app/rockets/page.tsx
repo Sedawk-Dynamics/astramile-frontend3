@@ -61,20 +61,28 @@ export default function RocketsPage() {
                     {r.tagline && <p className="text-accent text-xs uppercase tracking-wider mb-3">{r.tagline}</p>}
                     <p className="t-secondary leading-relaxed mb-6">{r.description}</p>
 
-                    <div className="grid grid-cols-4 gap-3 mb-6">
-                      {[
+                    {(() => {
+                      const stats = [
                         { icon: Ruler, label: "Height", val: formatMeters(r.heightM) },
                         { icon: Weight, label: "Weight", val: formatKg(r.weightKg) },
                         { icon: Target, label: "Payload", val: formatKg(r.payloadKg) },
-                        { icon: CheckCircle, label: "Launches", val: String(r.launches) },
-                      ].map((s) => (
-                        <div key={s.label} className="text-center p-3 rounded-xl bg-[var(--input-bg)] border border-[var(--border)]">
-                          <s.icon className="w-3.5 h-3.5 text-accent/50 mx-auto mb-1" />
-                          <p className="text-[10px] t-muted uppercase tracking-wider">{s.label}</p>
-                          <p className="text-xs font-semibold t-secondary mt-0.5">{s.val}</p>
+                        ...(r.launches > 0
+                          ? [{ icon: CheckCircle, label: "Launches", val: String(r.launches) }]
+                          : []),
+                      ];
+                      const cols = stats.length === 4 ? "grid-cols-4" : "grid-cols-3";
+                      return (
+                        <div className={`grid ${cols} gap-3 mb-6`}>
+                          {stats.map((s) => (
+                            <div key={s.label} className="text-center p-3 rounded-xl bg-[var(--input-bg)] border border-[var(--border)]">
+                              <s.icon className="w-3.5 h-3.5 text-accent/50 mx-auto mb-1" />
+                              <p className="text-[10px] t-muted uppercase tracking-wider">{s.label}</p>
+                              <p className="text-xs font-semibold t-secondary mt-0.5">{s.val}</p>
+                            </div>
+                          ))}
                         </div>
-                      ))}
-                    </div>
+                      );
+                    })()}
 
                     {r.features.length > 0 && (
                       <div className="flex flex-wrap gap-2">
