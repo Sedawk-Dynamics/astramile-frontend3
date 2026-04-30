@@ -154,8 +154,10 @@ export type ApiLaunch = {
 };
 
 export type ApiNews = {
-  id: string; slug: string; title: string; category: string; excerpt: string; body: string;
-  coverImage: string | null; publishedAt: string; isPublished: boolean;
+  id: string; slug: string; title: string; category: string;
+  excerpt: string | null; body: string | null;
+  coverImage: string | null; articleImage: string | null; newsLink: string | null;
+  publishedAt: string; isPublished: boolean;
 };
 
 export type ApiBlog = {

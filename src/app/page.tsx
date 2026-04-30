@@ -416,6 +416,12 @@ export default function Home() {
             <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-4 sm:gap-6">
               {topNews.map((n, i) => {
                 const img = resolveImage(n.coverImage);
+                const hasExternal = !!n.newsLink && n.newsLink.trim().length > 0;
+                const href = hasExternal ? n.newsLink! : `/news/${n.slug}`;
+                const linkProps = hasExternal
+                  ? { href, target: "_blank", rel: "noopener noreferrer" as const }
+                  : { href };
+                const LinkTag = (hasExternal ? "a" : Link) as React.ElementType;
                 return (
                   <motion.div key={n.id}
                     initial={{ opacity: 0, y: 50, filter: "blur(6px)" }}
@@ -423,26 +429,28 @@ export default function Home() {
                     viewport={{ once: true }}
                     transition={{ delay: i * 0.12, duration: 0.8 }}
                     className="group cursor-pointer">
-                    <div className="card overflow-hidden gradient-border tilt-hover">
-                      <div className={`relative h-56 overflow-hidden img-zoom ${!img ? "bg-[var(--surface)]" : ""}`}>
-                        {img && <Image src={img} alt={n.title} fill className="object-cover" sizes="33vw" />}
-                        <div className="absolute inset-0" style={{ background: "linear-gradient(to top, var(--bg-card) 10%, transparent 60%)" }} />
-                        <motion.span className="absolute top-4 left-4 glass rounded-lg px-3 py-1 text-[10px] font-mono uppercase tracking-wider"
-                          initial={{ opacity: 0, y: -8 }}
-                          whileInView={{ opacity: 1, y: 0 }}
-                          viewport={{ once: true }}
-                          transition={{ delay: 0.3 + i * 0.1 }}>
-                          {n.category}
-                        </motion.span>
+                    <LinkTag {...linkProps} className="block">
+                      <div className="card overflow-hidden gradient-border tilt-hover">
+                        <div className={`relative h-56 overflow-hidden img-zoom ${!img ? "bg-[var(--surface)]" : ""}`}>
+                          {img && <Image src={img} alt={n.title} fill className="object-cover" sizes="33vw" />}
+                          <div className="absolute inset-0" style={{ background: "linear-gradient(to top, var(--bg-card) 10%, transparent 60%)" }} />
+                          <motion.span className="absolute top-4 left-4 glass rounded-lg px-3 py-1 text-[10px] font-mono uppercase tracking-wider"
+                            initial={{ opacity: 0, y: -8 }}
+                            whileInView={{ opacity: 1, y: 0 }}
+                            viewport={{ once: true }}
+                            transition={{ delay: 0.3 + i * 0.1 }}>
+                            {n.category}
+                          </motion.span>
+                        </div>
+                        <div className="p-6">
+                          <p className="text-[10px] t-faint font-mono mb-3">{formatNewsDate(n.publishedAt)}</p>
+                          <h3 className="text-base font-semibold group-hover:text-accent-light transition-colors line-clamp-2 mb-4">{n.title}</h3>
+                          <span className="text-[10px] t-faint uppercase tracking-[0.15em] font-mono flex items-center gap-1 group-hover:text-accent transition-colors">
+                            Read more <ArrowRight className="w-3 h-3" />
+                          </span>
+                        </div>
                       </div>
-                      <div className="p-6">
-                        <p className="text-[10px] t-faint font-mono mb-3">{formatNewsDate(n.publishedAt)}</p>
-                        <h3 className="text-base font-semibold group-hover:text-accent-light transition-colors line-clamp-2 mb-4">{n.title}</h3>
-                        <span className="text-[10px] t-faint uppercase tracking-[0.15em] font-mono flex items-center gap-1 group-hover:text-accent transition-colors">
-                          Read more <ArrowRight className="w-3 h-3" />
-                        </span>
-                      </div>
-                    </div>
+                    </LinkTag>
                   </motion.div>
                 );
               })}
