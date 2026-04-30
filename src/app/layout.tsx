@@ -10,6 +10,11 @@ export const metadata: Metadata = {
   title: { default: "AstraMile | Launching the Future Beyond Earth", template: "%s | AstraMile" },
   description: "Explore cutting-edge space missions, rocket technology, and upcoming launches reshaping our understanding of the cosmos.",
   keywords: ["space", "rocket", "launch", "missions", "astronauts", "exploration", "AstraMile"],
+  icons: {
+    icon: [{ url: "/astramile-a.svg", type: "image/svg+xml" }],
+    shortcut: "/astramile-a.svg",
+    apple: "/astramile-a.svg",
+  },
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
