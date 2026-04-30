@@ -46,7 +46,7 @@ export default function LaunchesPage() {
   return (
     <div className="page-enter">
       <PageHero title="Upcoming Launches" subtitle="Real-time countdowns to humanity's next giant leaps."
-        image="https://images.unsplash.com/photo-1457364559154-aa2644600ebb?w=1400&q=80" label="Countdown" />
+        image="/launches.png" label="Countdown" />
 
       <section className="py-28 px-5">
         <div className="max-w-[1400px] mx-auto">
