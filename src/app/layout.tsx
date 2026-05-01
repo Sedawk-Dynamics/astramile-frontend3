@@ -22,6 +22,12 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="en" className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
       <head>
         <link href="https://fonts.googleapis.com/css2?family=Archivo+Black&display=swap" rel="stylesheet" />
+        <link rel="preconnect" href="https://www.youtube-nocookie.com" />
+        <link rel="preconnect" href="https://www.youtube.com" />
+        <link rel="preconnect" href="https://i.ytimg.com" />
+        <link rel="preconnect" href="https://yt3.ggpht.com" />
+        <link rel="dns-prefetch" href="https://www.google.com" />
+        <link rel="preload" href="https://www.youtube.com/iframe_api" as="script" />
       </head>
       <body className="min-h-screen bg-bg">
         <SiteChrome>{children}</SiteChrome>

@@ -6,6 +6,7 @@ import { motion, useScroll, useTransform } from "framer-motion";
 import { ArrowRight, ArrowUpRight, Zap, Shield, RotateCcw } from "lucide-react";
 import * as LucideIcons from "lucide-react";
 import TextReveal from "@/components/TextReveal";
+import HeroYouTube from "@/components/HeroYouTube";
 import Marquee from "@/components/Marquee";
 import MagneticWrap from "@/components/MagneticWrap";
 import ParallaxImage from "@/components/ParallaxImage";
@@ -55,19 +56,7 @@ export default function Home() {
       <section className="relative h-[100svh] min-h-[500px] overflow-hidden">
         <div className="absolute inset-0 z-0">
           <div className="absolute inset-0 overflow-hidden">
-            <iframe
-              src="https://www.youtube-nocookie.com/embed/4F8Heeu5L5U?autoplay=1&mute=1&loop=1&playlist=4F8Heeu5L5U&controls=0&showinfo=0&rel=0&modestbranding=1&playsinline=1&disablekb=1&iv_load_policy=3&fs=0&cc_load_policy=0"
-              allow="autoplay; encrypted-media"
-              className="absolute top-1/2 left-1/2 pointer-events-none"
-              style={{
-                border: "none",
-                width: "100vw",
-                height: "56.25vw",
-                minHeight: "100vh",
-                minWidth: "177.78vh",
-                transform: "translate(-50%, -50%)",
-              }}
-            />
+            <HeroYouTube videoId="4F8Heeu5L5U" />
             <div className="absolute inset-0 z-[1] pointer-events-auto" />
           </div>
           <Image src="/Karman line.webp" alt="Karman line" fill className="object-cover -z-10" sizes="100vw" priority />
@@ -104,7 +93,7 @@ export default function Home() {
         </div>
 
         <div className="absolute bottom-14 sm:bottom-16 md:bottom-20 left-1/2 -translate-x-1/2 z-10 pointer-events-none hidden md:flex flex-col items-center gap-2">
-          <div className="type-reveal-stramile w-[70vw] max-w-[640px] pl-6 md:pl-10 lg:pl-14">
+          <div className="type-reveal-stramile w-[70vw] max-w-[640px] pl-12 md:pl-20 lg:pl-28">
             <Image
               src="/astramile-stramile.svg"
               alt="AstraMile"
@@ -114,7 +103,7 @@ export default function Home() {
               priority
             />
           </div>
-          <div className="type-reveal-beyond w-[34vw] max-w-[260px]">
+          <div className="type-reveal-beyond w-[34vw] max-w-[260px] self-end">
             <Image
               src="/astramile-beyond.svg"
               alt="Beyond Infinity"
