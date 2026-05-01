@@ -7,6 +7,7 @@ import Footer from "@/components/Footer";
 import ScrollProgress from "@/components/ScrollProgress";
 import BackToTop from "@/components/BackToTop";
 import CursorFollower from "@/components/CursorFollower";
+import Chatbot from "@/components/Chatbot";
 import { loadYouTubeApi } from "@/components/HeroYouTube";
 
 export default function SiteChrome({ children }: { children: React.ReactNode }) {
@@ -32,6 +33,7 @@ export default function SiteChrome({ children }: { children: React.ReactNode }) 
       <main className="relative z-10">{children}</main>
       <Footer />
       <BackToTop />
+      <Chatbot />
       <CursorFollower />
     </>
   );
