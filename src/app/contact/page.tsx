@@ -9,8 +9,8 @@ import { postJson } from "@/lib/publicApi";
 
 const info = [
   { icon: MapPin, label: "Headquarters", value: "Hyderabad, Telangana, India" },
-  { icon: Phone, label: "Mission Control", value: "+1 (321) 867-5309" },
-  { icon: Mail, label: "Email", value: "contact@astramile.in" },
+  { icon: Phone, label: "Mission Control", value: "+91 7415677001" },
+  { icon: Mail, label: "Email", value: "contact@astramile.com" },
   { icon: Clock, label: "Operations", value: "24/7 Mission Support" },
 ];
 
