@@ -601,11 +601,11 @@ body {
 }
 .type-reveal-stramile {
   clip-path: inset(0 100% 0 0);
-  animation: type-reveal 1.6s steps(8) 0.8s forwards;
+  animation: type-reveal 1.6s steps(8) 7s forwards;
 }
 .type-reveal-beyond {
   clip-path: inset(0 100% 0 0);
-  animation: type-reveal 1.6s steps(14) 2.6s forwards;
+  animation: type-reveal 1.6s steps(14) 8.8s forwards;
 }
 
 @media (max-width: 768px) {

@@ -104,7 +104,7 @@ export default function Home() {
         </div>
 
         <div className="absolute bottom-14 sm:bottom-16 md:bottom-20 left-1/2 -translate-x-1/2 z-10 pointer-events-none hidden md:flex flex-col items-center gap-2">
-          <div className="type-reveal-stramile w-[70vw] max-w-[640px]">
+          <div className="type-reveal-stramile w-[70vw] max-w-[640px] pl-6 md:pl-10 lg:pl-14">
             <Image
               src="/astramile-stramile.svg"
               alt="AstraMile"
