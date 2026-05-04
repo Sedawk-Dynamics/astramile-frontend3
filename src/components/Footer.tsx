@@ -15,6 +15,7 @@ const footerLinks = {
   Missions: [
     { href: "/launches", label: "Launches" },
     { href: "/rockets", label: "Rockets" },
+    { href: "/satellites", label: "Satellites" },
     { href: "/technology", label: "Technology" },
     { href: "/missions", label: "Missions" },
   ],
@@ -25,9 +26,10 @@ const footerLinks = {
     { href: "#", label: "Terms of Service" },
   ],
   Connect: [
-    { href: "#", label: "X / Twitter" },
-    { href: "#", label: "LinkedIn" },
-    { href: "#", label: "YouTube" },
+    { href: "https://x.com/AstraMileSpace", label: "X / Twitter" },
+    { href: "https://www.linkedin.com/company/astramile/", label: "LinkedIn" },
+    { href: "https://www.instagram.com/astramileaerospace/", label: "Instagram" },
+    { href: "https://www.facebook.com/astramile/", label: "Facebook" },
   ],
 };
 
@@ -83,16 +85,21 @@ export default function Footer() {
                 {title}
               </h4>
               <ul className="space-y-3">
-                {links.map((link) => (
-                  <li key={link.label}>
-                    <Link
-                      href={link.href}
-                      className="text-sm t-faint hover:t-secondary transition-colors duration-300"
-                    >
-                      {link.label}
-                    </Link>
-                  </li>
-                ))}
+                {links.map((link) => {
+                  const isExternal = link.href.startsWith("http");
+                  return (
+                    <li key={link.label}>
+                      <Link
+                        href={link.href}
+                        target={isExternal ? "_blank" : undefined}
+                        rel={isExternal ? "noopener noreferrer" : undefined}
+                        className="text-sm t-faint hover:t-secondary transition-colors duration-300"
+                      >
+                        {link.label}
+                      </Link>
+                    </li>
+                  );
+                })}
               </ul>
             </motion.div>
           ))}

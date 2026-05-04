@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useRef, useEffect, FormEvent } from "react";
+import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
 import { Rocket, X, Send, Loader2 } from "lucide-react";
 
@@ -12,7 +13,7 @@ type ChatMessage = {
 const INITIAL_GREETING: ChatMessage = {
   role: "assistant",
   content:
-    "Hi! I'm AstraBot 🚀 — your guide to AstraMile. Ask me about our rockets, technology, team, or how to get in touch. How can I help you today?",
+    "Hi! I am the AI assistant for AstraMile. Ask me about our rockets, technology, team, or how to get in touch. How can I help you today?",
 };
 
 const SUGGESTIONS = [
@@ -196,13 +197,19 @@ export default function Chatbot() {
                       "linear-gradient(135deg, var(--accent), var(--accent-warm))",
                   }}
                 >
-                  <Rocket className="w-4 h-4 text-white -rotate-45" strokeWidth={2.2} />
+                  <Image
+                    src="/astramile-a.svg"
+                    alt="AstraMile"
+                    width={20}
+                    height={20}
+                    className="w-5 h-5"
+                  />
                 </div>
                 <div>
-                  <p className="text-sm font-semibold t-primary leading-tight">AstraBot</p>
+                  <p className="text-sm font-semibold t-primary leading-tight">AI Assistant</p>
                   <p className="text-[10px] t-faint uppercase tracking-wider flex items-center gap-1.5">
                     <span className="w-1.5 h-1.5 rounded-full bg-green-400 animate-pulse" />
-                    Mission Control · Online
+                    AstraMile · Online
                   </p>
                 </div>
               </div>
@@ -369,7 +376,7 @@ export default function Chatbot() {
               <p className="text-[10px] uppercase tracking-wider t-faint">Follow us</p>
               <div className="flex items-center gap-2">
                 <a
-                  href="https://www.instagram.com/astramile"
+                  href="https://www.instagram.com/astramileaerospace/"
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label="Instagram"
@@ -396,7 +403,7 @@ export default function Chatbot() {
                   </svg>
                 </a>
                 <a
-                  href="https://www.facebook.com/astramile"
+                  href="https://www.facebook.com/astramile/"
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label="Facebook"
@@ -417,7 +424,7 @@ export default function Chatbot() {
                   </svg>
                 </a>
                 <a
-                  href="https://x.com/astramile"
+                  href="https://x.com/AstraMileSpace"
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label="X (Twitter)"
@@ -435,6 +442,27 @@ export default function Chatbot() {
                     style={{ color: "var(--text-secondary)" }}
                   >
                     <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
+                  </svg>
+                </a>
+                <a
+                  href="https://www.linkedin.com/company/astramile/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label="LinkedIn"
+                  className="w-8 h-8 rounded-lg flex items-center justify-center transition-all hover:scale-110"
+                  style={{
+                    background: "var(--surface)",
+                    border: "1px solid var(--border)",
+                  }}
+                >
+                  <svg
+                    viewBox="0 0 24 24"
+                    aria-hidden="true"
+                    className="w-3.5 h-3.5"
+                    fill="currentColor"
+                    style={{ color: "var(--text-secondary)" }}
+                  >
+                    <path d="M20.45 20.45h-3.56v-5.57c0-1.33-.03-3.04-1.85-3.04-1.85 0-2.14 1.45-2.14 2.94v5.67H9.34V9h3.42v1.56h.05c.48-.9 1.64-1.85 3.38-1.85 3.61 0 4.27 2.38 4.27 5.47v6.27zM5.34 7.43a2.07 2.07 0 1 1 0-4.14 2.07 2.07 0 0 1 0 4.14zM7.12 20.45H3.56V9h3.56v11.45zM22.22 0H1.77C.79 0 0 .77 0 1.72v20.56C0 23.23.79 24 1.77 24h20.45c.98 0 1.78-.77 1.78-1.72V1.72C24 .77 23.2 0 22.22 0z" />
                   </svg>
                 </a>
               </div>
