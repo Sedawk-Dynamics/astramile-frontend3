@@ -234,9 +234,10 @@ export default function Home() {
             <motion.p initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}
               transition={{ delay: 0.2 }}
               className="t-secondary leading-relaxed mb-4 text-justify hyphens-auto">
-              Astramile Aerospace Private Limited is India&apos;s first full-stack private orbital launch company, building a complete ecosystem of liquid-propellant rockets and satellites from a 100-acre integrated campus in Andhra Pradesh. Founded in December 2025 by a team of retired defence veterans and ex-ISRO/DRDO professionals, Astramile is developing the Rudra series of all-liquid LOX/RP-1 rockets — from small satellite launchers to heavy-lift and deep-space mission vehicles — powered by a single scalable 10-ton engine platform.
+              Astramile Aerospace Private Limited is India&apos;s first full-stack private orbital launch company, headquartered in Hyderabad, building a complete ecosystem of liquid-propellant rockets and satellites from a 100-acre integrated campus in Andhra Pradesh. Founded in December 2025 by a team of retired defence veterans and ex-ISRO/DRDO professionals, Astramile is developing the Rudra series of all-liquid LOX/RP-1 rockets — from small-satellite launchers to heavy-lift and deep-space mission vehicles — powered by a single scalable 10-ton liquid-propulsion semi-cryogenic engine platform.
               <br></br>
-              Our mission: to make India a global leader in affordable, reliable, and reusable orbital access.
+              <br></br>
+              OUR MISSION: To make India a global leader in affordable, reliable, and reusable orbital access.
             </motion.p>
 
             <motion.div initial={{ opacity: 0, y: 15 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}
