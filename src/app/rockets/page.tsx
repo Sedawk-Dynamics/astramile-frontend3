@@ -62,15 +62,26 @@ export default function RocketsPage() {
                     <p className="t-secondary leading-relaxed mb-6">{r.description}</p>
 
                     {(() => {
-                      const stats = [
+                      const stats: { icon: typeof Ruler; label: string; val: string }[] = [
                         { icon: Ruler, label: "Height", val: formatMeters(r.heightM) },
                         { icon: Weight, label: "Weight", val: formatKg(r.weightKg) },
-                        { icon: Target, label: "Payload", val: formatKg(r.payloadKg) },
-                        ...(r.launches > 0
-                          ? [{ icon: CheckCircle, label: "Launches", val: String(r.launches) }]
-                          : []),
                       ];
-                      const cols = stats.length === 4 ? "grid-cols-4" : "grid-cols-3";
+                      if (r.payloadLeoKg !== null) {
+                        stats.push({ icon: Target, label: "Payload (LEO)", val: formatKg(r.payloadLeoKg) });
+                      }
+                      if (r.payloadTliKg !== null) {
+                        stats.push({ icon: Target, label: "Payload (TLI)", val: formatKg(r.payloadTliKg) });
+                      }
+                      if (r.launches > 0) {
+                        stats.push({ icon: CheckCircle, label: "Launches", val: String(r.launches) });
+                      }
+                      const colsByCount: Record<number, string> = {
+                        2: "grid-cols-2",
+                        3: "grid-cols-3",
+                        4: "grid-cols-4",
+                        5: "grid-cols-5",
+                      };
+                      const cols = colsByCount[stats.length] ?? "grid-cols-3";
                       return (
                         <div className={`grid ${cols} gap-3 mb-6`}>
                           {stats.map((s) => (

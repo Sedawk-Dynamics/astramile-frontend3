@@ -173,8 +173,13 @@ export default function Home() {
                       </div>
                       <div className="p-6">
                         <h3 className="font-display text-lg mb-1 group-hover:text-accent-light transition-colors">{r.name}</h3>
-                        {r.payloadKg !== null && (
-                          <p className="text-xs t-muted font-mono mb-4">Payload: {formatPayload(r.payloadKg)} to LEO</p>
+                        {(r.payloadLeoKg !== null || r.payloadTliKg !== null) && (
+                          <p className="text-xs t-muted font-mono mb-4">
+                            Payload:
+                            {r.payloadLeoKg !== null && <> {formatPayload(r.payloadLeoKg)} to LEO</>}
+                            {r.payloadLeoKg !== null && r.payloadTliKg !== null && " · "}
+                            {r.payloadTliKg !== null && <> {formatPayload(r.payloadTliKg)} to TLI</>}
+                          </p>
                         )}
                         <motion.div className="h-px origin-left"
                           style={{ background: "linear-gradient(90deg, var(--accent), var(--accent-warm), transparent)" }}

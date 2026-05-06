@@ -123,7 +123,8 @@ export async function postJson<T>(path: string, body: unknown): Promise<T> {
 
 export type ApiRocket = {
   id: string; slug: string; name: string; tagline: string | null; description: string;
-  heightM: number | null; weightKg: number | null; payloadKg: number | null;
+  heightM: number | null; weightKg: number | null;
+  payloadLeoKg: number | null; payloadTliKg: number | null;
   successRate: number | null; launches: number; features: string[]; image: string | null;
   order: number; isPublished: boolean;
 };
